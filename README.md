@@ -1,7 +1,7 @@
 # Internet-Mobile-Programming
 School course repository
 
-# GROUP MEMBERS
+# GROUP 15 
 
 AGYINGI JAN ROYAL           -FE20A005
 
