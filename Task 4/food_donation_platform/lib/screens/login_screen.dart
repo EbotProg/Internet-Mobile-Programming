@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:food_donation_platform/screens/login_screen.dart';
+import 'package:food_donation_platform/screens/sign_up_screen.dart';
 
-class SignUpScreen extends StatelessWidget {
-  const SignUpScreen({super.key});
+class LoginScreen extends StatelessWidget {
+  const LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class SignUpScreen extends StatelessWidget {
           child: Column(children: [
             const SizedBox(height: 30),
             const Text(
-              'Register',
+              'Login',
               style: TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.bold,
@@ -40,25 +40,7 @@ class SignUpScreen extends StatelessWidget {
             const SizedBox(height: 20),
             TextFormField(
               decoration: const InputDecoration(
-                label: Text('Email'),
-                border: OutlineInputBorder(),
-                fillColor: Color(0xffECECEC),
-              ),
-              keyboardType: TextInputType.emailAddress,
-            ),
-            const SizedBox(height: 20),
-            TextFormField(
-              decoration: const InputDecoration(
                 label: Text('Password'),
-                border: OutlineInputBorder(),
-                fillColor: Color(0xffECECEC),
-              ),
-              obscureText: true,
-            ),
-            const SizedBox(height: 20),
-            TextFormField(
-              decoration: const InputDecoration(
-                label: Text('Confirm Password'),
                 border: OutlineInputBorder(),
                 fillColor: Color(0xffECECEC),
               ),
@@ -77,7 +59,7 @@ class SignUpScreen extends StatelessWidget {
                   ),
                 ),
                 child: const Text(
-                  'Register',
+                  'Login',
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
@@ -94,7 +76,7 @@ class SignUpScreen extends StatelessWidget {
                 onPressed: () {
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
-                      builder: (context) => const LoginScreen(),
+                      builder: (context) => const SignUpScreen(),
                     ),
                   );
                 },
@@ -104,7 +86,7 @@ class SignUpScreen extends StatelessWidget {
                   ),
                 ),
                 child: const Text(
-                  'Login',
+                  'Register',
                   style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
