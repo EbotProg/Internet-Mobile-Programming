@@ -11,8 +11,11 @@ class FoodScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         leading: IconButton(
-            onPressed: () {},
-            icon: Icon(Icons.arrow_back_ios_rounded, color: Colors.white)),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          icon: const Icon(Icons.arrow_back_ios_rounded, color: Colors.white),
+        ),
       ),
       extendBodyBehindAppBar: true,
       body: Column(
@@ -38,9 +41,7 @@ class FoodScreen extends StatelessWidget {
                       const Text("Fufu and Eru",
                           style: TextStyle(
                               fontSize: 30, fontWeight: FontWeight.bold)),
-                      const SizedBox(
-                        height: 10,
-                      ),
+                      const SizedBox(height: 10),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -49,27 +50,27 @@ class FoodScreen extends StatelessWidget {
                             children: [
                               CircleAvatar(
                                 child: Container(
-                                  decoration: BoxDecoration(
+                                  decoration: const BoxDecoration(
                                       image: DecorationImage(
                                           fit: BoxFit.cover,
                                           image:
                                               AssetImage('assets/zele.png'))),
                                 ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 10,
                               ),
-                              Text("Big \nZele"),
+                              const Text("Big \nZele"),
                             ],
                           ),
-                          Text("\t | \t"),
-                          Text(
+                          const Text("\t | \t"),
+                          const Text(
                             "Feb 14 2022 \n 7:45 pm",
                             style: TextStyle(fontSize: 11, color: Colors.grey),
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       Center(
