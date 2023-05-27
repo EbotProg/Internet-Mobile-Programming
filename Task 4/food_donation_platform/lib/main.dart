@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:food_donation_platform/screens/food_screen.dart';
 import 'package:food_donation_platform/screens/sign_up_screen.dart';
 
 void main() {
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xff20B970)),
         useMaterial3: true,
       ),
-      home: const SignUpScreen(),
+      home: const FoodScreen(),
     );
   }
 }
