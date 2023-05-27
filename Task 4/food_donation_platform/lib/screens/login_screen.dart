@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:food_donation_platform/screens/home_screen.dart';
 import 'package:food_donation_platform/screens/sign_up_screen.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -51,7 +52,13 @@ class LoginScreen extends StatelessWidget {
               width: double.infinity,
               height: 50,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (context) => const HomeScreen(),
+                    ),
+                  );
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xff20B970),
                   shape: RoundedRectangleBorder(
