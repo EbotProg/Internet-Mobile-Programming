@@ -53,7 +53,7 @@ class UploadFoodScreen extends StatelessWidget {
                 ),
               ),
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-              child: Row(
+              child: const Row(
                 children: [
                   Icon(Icons.upload_file, size: 35),
                   Text(

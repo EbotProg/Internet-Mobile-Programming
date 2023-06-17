@@ -11,15 +11,15 @@ class MakePayment extends StatelessWidget {
           icon: const Icon(Icons.arrow_back_ios_new_outlined),
           onPressed: () {},
         ),
-        title: Text("Make Payment"),
+        title: const Text("Make Payment"),
         centerTitle: true,
       ),
       body: Column(children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
+        const Padding(
+          padding: EdgeInsets.all(8.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
+            children: [
               Text(
                 "Amount",
                 style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
@@ -39,7 +39,7 @@ class MakePayment extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Enter your Phone Number"),
+              const Text("Enter your Phone Number"),
               Container(
                 height: 60,
                 decoration: BoxDecoration(
@@ -93,10 +93,10 @@ class MakePayment extends StatelessWidget {
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 20,
-                              color: const Color(0xff20B970),
+                              color: Color(0xff20B970),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           SizedBox(

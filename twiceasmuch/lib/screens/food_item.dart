@@ -42,7 +42,7 @@ class FoodItem extends StatelessWidget {
                   horizontal: 10,
                   vertical: 10,
                 ),
-                child: Column(
+                child: const Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(

@@ -48,12 +48,12 @@ class NotificationsScreen extends StatelessWidget {
         ),
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
         margin: const EdgeInsets.symmetric(vertical: 10),
-        child: Column(
+        child: const Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
+              children: [
                 Text(
                   'Nji Caleb',
                   style: TextStyle(fontWeight: FontWeight.bold),

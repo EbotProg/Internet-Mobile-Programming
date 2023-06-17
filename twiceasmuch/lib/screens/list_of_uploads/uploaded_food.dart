@@ -23,7 +23,7 @@ class UploadedFood extends StatelessWidget {
             ),
             Container(
               decoration: const BoxDecoration(
-                color: const Color(0xff313131),
+                color: Color(0xff313131),
                 borderRadius:
                     BorderRadius.vertical(bottom: Radius.circular(10)),
               ),
@@ -34,7 +34,7 @@ class UploadedFood extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     'Fufu and Eru',
                     style: TextStyle(
                       color: Colors.white,
@@ -43,11 +43,11 @@ class UploadedFood extends StatelessWidget {
                     ),
                     textAlign: TextAlign.left,
                   ),
-                  SizedBox(height: 5),
+                  const SizedBox(height: 5),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
+                      const Text(
                         '1000 fcfa',
                         style: TextStyle(
                           color: Colors.white,

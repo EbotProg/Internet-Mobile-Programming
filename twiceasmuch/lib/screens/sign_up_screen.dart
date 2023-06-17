@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:food_donation_platform_app/screens/home_screen.dart';
-import 'package:food_donation_platform_app/screens/login_screen.dart';
+import 'package:twiceasmuch/screens/home_screen.dart';
+import 'package:twiceasmuch/screens/login_screen.dart';
 
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({super.key});

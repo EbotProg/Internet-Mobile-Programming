@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:food_donation_platform_app/screens/account_screen.dart';
-import 'package:food_donation_platform_app/screens/notifications_screen.dart';
-import 'package:food_donation_platform_app/screens/starter_screen.dart';
-import 'package:food_donation_platform_app/screens/upload_food.dart';
+import 'package:twiceasmuch/screens/account_screen.dart';
+import 'package:twiceasmuch/screens/notifications_screen.dart';
+import 'package:twiceasmuch/screens/starter_screen.dart';
+import 'package:twiceasmuch/screens/upload_food.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

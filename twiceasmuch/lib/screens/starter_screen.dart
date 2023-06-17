@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:food_donation_platform_app/screens/food_item.dart';
-import 'package:food_donation_platform_app/screens/food_screen.dart';
+import 'package:twiceasmuch/screens/food_item.dart';
+import 'package:twiceasmuch/screens/food_screen.dart';
 
 class StarterScreen extends StatelessWidget {
   const StarterScreen({super.key});
@@ -119,7 +119,7 @@ class StarterScreen extends StatelessWidget {
                   horizontal: 20,
                   vertical: 20,
                 ),
-                child: Column(
+                child: const Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(

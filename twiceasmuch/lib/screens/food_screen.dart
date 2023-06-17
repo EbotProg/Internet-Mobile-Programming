@@ -87,7 +87,7 @@ class FoodScreen extends StatelessWidget {
                                   builder: (context) {
                                     return Container(
                                       height: 180,
-                                      decoration: BoxDecoration(),
+                                      decoration: const BoxDecoration(),
                                       child: Column(
                                         children: [
                                           const SizedBox(
@@ -153,7 +153,7 @@ class FoodScreen extends StatelessWidget {
                                                                     'assets/orange.png'))),
                                                       ),
                                                     ),
-                                                    Text("Orange Money")
+                                                    const Text("Orange Money")
                                                   ],
                                                 ),
                                               ]),
@@ -181,8 +181,8 @@ class FoodScreen extends StatelessWidget {
                       ),
                       IconButton(
                           onPressed: () {},
-                          icon: Row(
-                            children: const [
+                          icon: const Row(
+                            children: [
                               Icon(Icons.message_outlined),
                               SizedBox(
                                 width: 10,
@@ -198,7 +198,7 @@ class FoodScreen extends StatelessWidget {
             Expanded(
               child: Container(
                 color: const Color.fromARGB(255, 226, 230, 231),
-                child: Padding(
+                child: const Padding(
                   padding: EdgeInsets.all(8.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

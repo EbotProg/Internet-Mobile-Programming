@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:food_donation_platform_app/screens/food_item.dart';
-import 'package:food_donation_platform_app/screens/uploaded_food.dart';
+import 'package:twiceasmuch/screens/list_of_uploads/uploaded_food.dart';
 
 class ListOfUploads extends StatelessWidget {
   const ListOfUploads({super.key});
@@ -10,14 +9,16 @@ class ListOfUploads extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-            onPressed: () {}, icon: Icon(Icons.arrow_back_ios_new_outlined)),
-        title: Text("My uploads"),
+          onPressed: () {},
+          icon: const Icon(Icons.arrow_back_ios_new_outlined),
+        ),
+        title: const Text("My uploads"),
         centerTitle: true,
       ),
       body: ListView.builder(
           itemCount: 5,
           itemBuilder: (context, index) {
-            return UploadedFood();
+            return const UploadedFood();
           }),
     );
   }
