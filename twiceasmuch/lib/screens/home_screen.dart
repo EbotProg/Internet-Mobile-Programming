@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:twiceasmuch/screens/account_screen.dart';
+import 'package:twiceasmuch/screens/chats_screen.dart';
+import 'package:twiceasmuch/screens/list_of_uploads/list_of_uploads.dart';
 import 'package:twiceasmuch/screens/notifications_screen.dart';
 import 'package:twiceasmuch/screens/starter_screen.dart';
+import 'package:twiceasmuch/screens/transactions_screen.dart';
 import 'package:twiceasmuch/screens/upload_food.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -16,7 +19,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final screens = [
     const StarterScreen(),
-    const UploadFoodScreen(),
+    const ListOfUploads(),
+    const ChatsScreen(),
+    const TrasactionsScreen(),
+  ];
+
+  final titles = [
+    '2ICEASMUCH',
+    'Inventory',
+    'Chats',
+    'Trasactions',
   ];
 
   @override
@@ -24,29 +36,29 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xff292E2A),
-        title: const Text(
-          'F',
-          style: TextStyle(
+        centerTitle: true,
+        title: Text(
+          titles[index],
+          style: const TextStyle(
             color: Colors.white,
-            fontSize: 30,
+            fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
         ),
-        actions: [
-          IconButton(
-            icon: const CircleAvatar(
-              foregroundImage: AssetImage('assets/Ellipse 4.png'),
-            ),
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => const AccountScreen(),
-                ),
-              );
-            },
-            tooltip: 'Account',
+        leading: IconButton(
+          icon: const CircleAvatar(
+            foregroundImage: AssetImage('assets/Ellipse 4.png'),
           ),
-          const SizedBox(width: 10),
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => const AccountScreen(),
+              ),
+            );
+          },
+          tooltip: 'Account',
+        ),
+        actions: [
           IconButton(
             icon: const Icon(
               Icons.notifications,
@@ -66,6 +78,16 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       body: screens[index],
+      floatingActionButton: index == 1
+          ? FloatingActionButton(
+              child: const Icon(Icons.upload),
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (c) => const UploadFoodScreen(),
+                ));
+              },
+            )
+          : null,
       bottomNavigationBar: BottomNavigationBar(
         onTap: (index) {
           setState(() {
@@ -80,13 +102,21 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: Icon(Icons.home),
             label: 'Home',
           ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.upload),
+          //   label: 'Upload',
+          // ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.upload),
-            label: 'Upload',
+            icon: Icon(Icons.inventory_2_sharp),
+            label: 'Inventory',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
+            icon: Icon(Icons.chat_bubble),
+            label: 'Chats',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.data_exploration_sharp),
+            label: 'Transactions',
           ),
         ],
       ),

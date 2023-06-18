@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:twiceasmuch/screens/list_of_uploads/list_of_uploads.dart';
+import 'package:twiceasmuch/screens/sign_up_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xff20B970)),
         useMaterial3: true,
       ),
-      home: const ListOfUploads(),
+      home: const SignUpScreen(),
     );
   }
 }

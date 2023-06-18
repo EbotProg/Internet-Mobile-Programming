@@ -6,20 +6,10 @@ class ListOfUploads extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.arrow_back_ios_new_outlined),
-        ),
-        title: const Text("My uploads"),
-        centerTitle: true,
-      ),
-      body: ListView.builder(
-          itemCount: 5,
-          itemBuilder: (context, index) {
-            return const UploadedFood();
-          }),
-    );
+    return ListView.builder(
+        itemCount: 5,
+        itemBuilder: (context, index) {
+          return const UploadedFood();
+        });
   }
 }
