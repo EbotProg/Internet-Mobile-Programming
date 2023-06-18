@@ -8,7 +8,6 @@ class AppUser {
     this.rating,
     this.isDonor = false,
     this.picture,
-    this.occupation,
     this.phoneNumber,
   });
 
@@ -21,35 +20,32 @@ class AppUser {
   bool isDonor;
   String? picture;
   String? phoneNumber;
-  String? occupation;
 
   Map<String, dynamic> toJson() {
     return {
-      'userID': userID,
+      'userid': userID,
       'username': username,
       'email': email,
       'location': location,
-      'verificationStatus': verificationStatus,
+      'verificationstatus': verificationStatus,
       'rating': rating,
-      'isDonor': isDonor,
+      'isdonor': isDonor,
       'picture': picture,
-      'phoneNumber': phoneNumber,
-      'occupation': occupation,
+      'phonenumber': phoneNumber,
     };
   }
 
   factory AppUser.fromJson(Map<String, dynamic> user) {
     return AppUser(
-      userID: user['userID'],
+      userID: user['userid'],
       username: user['username'],
       email: user['email'],
       location: user['location'],
       verificationStatus: user['verificationstatus'],
       rating: user['rating'],
-      isDonor: user['isDonor'],
+      isDonor: user['isdonor'],
       picture: user['picture'],
-      phoneNumber: user['phoneNumber'],
-      occupation: user['occupation'],
+      phoneNumber: user['phonenumber'],
     );
   }
 

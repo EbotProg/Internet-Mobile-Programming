@@ -32,30 +32,30 @@ class Transaction {
 
   Map<String, dynamic> toJson() {
     return {
-      'transactionID': transactionID,
-      'foodID': foodID,
-      'discountedPrice': discountedPrice,
+      'transactionid': transactionID,
+      'foodid': foodID,
+      'discountedprice': discountedPrice,
       'time': DateFormat('yyyy-MM-dd HH:mm:ss').format(
         (time ?? DateTime.now()).toUtc(),
       ),
-      'buyerID': buyerID,
-      'donorID': donorID,
-      'paymentID': paymentID,
+      'buyerid': buyerID,
+      'donorid': donorID,
+      'paymentid': paymentID,
       'status': status.toString(),
     };
   }
 
   factory Transaction.fromJson(Map<String, dynamic> transaction) {
     return Transaction(
-      transactionID: transaction['transactionID'],
-      foodID: transaction['foodID'],
-      discountedPrice: transaction['discountedPrice'],
+      transactionID: transaction['transactionid'],
+      foodID: transaction['foodid'],
+      discountedPrice: transaction['discountedprice'],
       time: DateFormat('yyyy-MM-dd HH:mm:ss')
           .parseUTC(transaction['time'])
           .toLocal(),
-      buyerID: transaction['buyerID'],
-      donorID: transaction['donorID'],
-      paymentID: transaction['paymentID'],
+      buyerID: transaction['buyerid'],
+      donorID: transaction['donorid'],
+      paymentID: transaction['paymentid'],
       status: TransactionStatus.fromString(transaction['status']),
     );
   }

@@ -19,19 +19,19 @@ class Notification {
 
   Map<String, dynamic> toJson() {
     return {
-      'notificationID': notificationID,
+      'notificationid': notificationID,
       'content': content,
-      'foodID': foodID,
-      'userID': userID,
+      'foodid': foodID,
+      'userid': userID,
     };
   }
 
   factory Notification.fromJson(Map<String, dynamic> notification) {
     return Notification(
-      notificationID: notification['notificationID'],
+      notificationID: notification['notificationid'],
       content: notification['content'],
-      foodID: notification['foodID'],
-      userID: notification['userID'],
+      foodID: notification['foodid'],
+      userID: notification['userid'],
     );
   }
 }

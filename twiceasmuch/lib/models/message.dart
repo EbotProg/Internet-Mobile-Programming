@@ -27,12 +27,12 @@ class Message {
 
   factory Message.fromJson(Map<String, dynamic> json) {
     return Message(
-      messageID: json['messageID'],
-      senderID: json['senderID'],
-      foodID: json['foodID'],
-      receiverID: json['receiverID'],
+      messageID: json['messageid'],
+      senderID: json['senderid'],
+      foodID: json['foodid'],
+      receiverID: json['receiverid'],
       timeSent: DateFormat('yyyy-MM-dd HH:mm:ss')
-          .parseUTC(json['uploadedAt'])
+          .parseUTC(json['timesent'])
           .toLocal(),
       content: json['content'],
       isRead: json['isRead'],
@@ -41,11 +41,11 @@ class Message {
 
   Map<String, dynamic> toJson() {
     return {
-      "messageID": messageID,
-      "senderID": senderID,
-      "foodID": foodID,
-      "receiverID": receiverID,
-      "timeSent": DateFormat('yyyy-MM-dd HH:mm:ss').format(
+      "messageid": messageID,
+      "senderid": senderID,
+      "foodid": foodID,
+      "receiverid": receiverID,
+      "timesent": DateFormat('yyyy-MM-dd HH:mm:ss').format(
         (timeSent ?? DateTime.now()).toUtc(),
       ),
       "content": content,
