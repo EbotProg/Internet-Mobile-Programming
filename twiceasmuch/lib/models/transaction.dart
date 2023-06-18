@@ -25,8 +25,8 @@ class Transaction {
   String? donorID;
   TransactionStatus? status;
 
-  User? buyer;
-  User? donor;
+  AppUser? buyer;
+  AppUser? donor;
   Food? food;
   Payment? payment;
 

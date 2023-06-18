@@ -1,5 +1,5 @@
-class User {
-  User({
+class AppUser {
+  AppUser({
     this.userID,
     this.email,
     this.username,
@@ -38,8 +38,8 @@ class User {
     };
   }
 
-  factory User.fromJson(Map<String, dynamic> user) {
-    return User(
+  factory AppUser.fromJson(Map<String, dynamic> user) {
+    return AppUser(
       userID: user['userID'],
       username: user['username'],
       email: user['email'],

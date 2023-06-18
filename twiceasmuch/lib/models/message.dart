@@ -11,8 +11,8 @@ class Message {
   final int? foodID;
   final bool? isRead;
 
-  User? sender;
-  User? receiver;
+  AppUser? sender;
+  AppUser? receiver;
   Food? food;
 
   Message({

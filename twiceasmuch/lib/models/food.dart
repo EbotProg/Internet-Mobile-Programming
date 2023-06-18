@@ -14,7 +14,7 @@ class Food {
   final FoodState state;
   final num? discountPrice;
 
-  User? donor;
+  AppUser? donor;
 
   Food({
     this.name,

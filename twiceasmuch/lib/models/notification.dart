@@ -8,13 +8,13 @@ class Notification {
     this.foodID,
     this.userID,
   });
-  
+
   int? notificationID;
   int? foodID;
   int? userID;
   String? content;
 
-  User? user;
+  AppUser? user;
   Food? food;
 
   Map<String, dynamic> toJson() {

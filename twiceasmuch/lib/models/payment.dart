@@ -21,8 +21,8 @@ class Payment {
   String? depositorID;
   String? withdrawerID;
 
-  User? depositor;
-  User? withdrawer;
+  AppUser? depositor;
+  AppUser? withdrawer;
 
   Map<String, dynamic> toJson() {
     return {
