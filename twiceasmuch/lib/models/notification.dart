@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:twiceasmuch/models/food.dart';
 import 'package:twiceasmuch/models/user.dart';
 
@@ -7,12 +8,14 @@ class Notification {
     this.content,
     this.foodID,
     this.userID,
+    this.timeSent,
   });
 
   int? notificationID;
   int? foodID;
-  int? userID;
+  String? userID;
   String? content;
+  DateTime? timeSent;
 
   AppUser? user;
   Food? food;
@@ -23,6 +26,9 @@ class Notification {
       'content': content,
       'foodid': foodID,
       'userid': userID,
+      'timesent': DateFormat('yyyy-MM-dd HH:mm:ss').format(
+        (timeSent ?? DateTime.now()).toUtc(),
+      ),
     };
   }
 
@@ -32,6 +38,9 @@ class Notification {
       content: notification['content'],
       foodID: notification['foodid'],
       userID: notification['userid'],
+      timeSent: DateFormat('yyyy-MM-dd HH:mm:ss')
+          .parseUTC(notification['timesent'])
+          .toLocal(),
     );
   }
 }

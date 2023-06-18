@@ -82,6 +82,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   } else if (input.length < 3) {
                     return 'length should be at least 3';
                   }
+                  return null;
                 },
                 decoration: const InputDecoration(
                   label: Text('Name'),
@@ -103,6 +104,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       .hasMatch(input)) {
                     return "please enter a valid email";
                   }
+                  return null;
                 },
                 decoration: const InputDecoration(
                   label: Text('Email'),
@@ -139,6 +141,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   } else if (input.length < 8) {
                     return 'length should be at least 8 characters';
                   }
+                  return null;
                 },
                 decoration: const InputDecoration(
                   label: Text('Password'),
@@ -161,6 +164,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   } else if (input != passwordSignUpController!.text) {
                     return 'passwords don\'t match';
                   }
+                  return null;
                 },
                 decoration: const InputDecoration(
                   label: Text('Confirm Password'),

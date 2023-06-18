@@ -68,6 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       .hasMatch(input)) {
                     return "please enter a valid email";
                   }
+                  return null;
                 },
                 onFieldSubmitted: (_) {
                   passwordSignInFocus!.requestFocus();
@@ -86,6 +87,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   if (input!.isEmpty) {
                     return 'Please enter your password';
                   }
+                  return null;
                 },
                 decoration: const InputDecoration(
                   label: Text('Password'),

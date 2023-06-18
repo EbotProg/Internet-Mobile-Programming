@@ -1,12 +1,9 @@
 import 'dart:async';
 
-import 'package:image_picker/image_picker.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:twiceasmuch/db/food_db_methods.dart';
 import 'package:twiceasmuch/db/user_db_methods.dart';
-import 'package:twiceasmuch/enums/food_state.dart';
 import 'package:twiceasmuch/models/chat.dart';
-import 'package:twiceasmuch/models/food.dart';
 import 'package:twiceasmuch/models/message.dart';
 
 class ChatDBMethods {
@@ -18,7 +15,7 @@ class ChatDBMethods {
           .from('messages')
           .select<List<Map<String, dynamic>>>()
           .contains('senderid', userId)
-          .order('timeSent');
+          .order('timesent');
       final messagesMap2 = await supabaseInstance.client
           .from('messages')
           .select<List<Map<String, dynamic>>>()
@@ -36,7 +33,7 @@ class ChatDBMethods {
       );
 
       final chats = <Chat>[];
-      messages.forEach((message) {
+      for (var message in messages) {
         if (message.foodID != null) {
           message.food = foods.firstWhere(
             (food) => food.foodID == message.foodID,
@@ -56,7 +53,7 @@ class ChatDBMethods {
             ),
           );
         }
-      });
+      }
 
       return chats;
     } on PostgrestException catch (e) {

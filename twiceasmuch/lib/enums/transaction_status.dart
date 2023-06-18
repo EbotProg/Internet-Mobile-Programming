@@ -1,6 +1,7 @@
 enum TransactionStatus {
   requested,
-  delivered;
+  delivered,
+  canceled;
 
   factory TransactionStatus.fromString(String value) {
     return TransactionStatus.values.firstWhere(

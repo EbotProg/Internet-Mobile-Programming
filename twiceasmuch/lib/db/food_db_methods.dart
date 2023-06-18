@@ -17,11 +17,11 @@ class FoodDBMethods {
 
       final foods = foodMaps.map((e) => Food.fromJson(e)).toList();
 
-      foods.forEach((food) {
+      for (var food in foods) {
         food.donor = users.firstWhere(
           (user) => user.userID == food.donorID,
         );
-      });
+      }
       return foods;
     } on PostgrestException catch (e) {
       print(e);
@@ -42,11 +42,11 @@ class FoodDBMethods {
 
       final foods = foodMaps.map((e) => Food.fromJson(e)).toList();
 
-      foods.forEach((food) {
+      for (var food in foods) {
         food.donor = users.firstWhere(
           (user) => user.userID == food.donorID,
         );
-      });
+      }
       return foods;
     } on PostgrestException catch (e) {
       print(e);
@@ -67,11 +67,11 @@ class FoodDBMethods {
 
       final foods = foodMaps.map((e) => Food.fromJson(e)).toList();
 
-      foods.forEach((food) {
+      for (var food in foods) {
         food.donor = users.firstWhere(
           (user) => user.userID == food.donorID,
         );
-      });
+      }
       return foods;
     } on PostgrestException catch (e) {
       print(e);
@@ -118,11 +118,11 @@ class FoodDBMethods {
 
       final foods = foodMaps.map((e) => Food.fromJson(e)).toList();
 
-      foods.forEach((food) {
+      for (var food in foods) {
         food.donor = users.firstWhere(
           (user) => user.userID == food.donorID,
         );
-      });
+      }
       return foods;
     } on PostgrestException catch (e) {
       print(e);
@@ -169,11 +169,11 @@ class FoodDBMethods {
 
       final foods = foodMaps.map((e) => Food.fromJson(e)).toList();
 
-      foods.forEach((food) {
+      for (var food in foods) {
         food.donor = users.firstWhere(
           (user) => user.userID == food.donorID,
         );
-      });
+      }
       return foods;
     } on PostgrestException catch (e) {
       print(e);

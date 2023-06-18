@@ -34,9 +34,11 @@ class Payment {
       'timeofdeposit': DateFormat('yyyy-MM-dd HH:mm:ss').format(
         (timeOfDeposit ?? DateTime.now()).toUtc(),
       ),
-      'timeofwithdrawal': DateFormat('yyyy-MM-dd HH:mm:ss').format(
-        (timeOfWithdrawal ?? DateTime.now()).toUtc(),
-      ),
+      'timeofwithdrawal': timeOfWithdrawal == null
+          ? null
+          : DateFormat('yyyy-MM-dd HH:mm:ss').format(
+              timeOfWithdrawal!.toUtc(),
+            ),
     };
   }
 
@@ -50,7 +52,7 @@ class Payment {
       timeOfDeposit: DateFormat('yyyy-MM-dd HH:mm:ss')
           .parseUTC(payment['timeofdeposit'])
           .toLocal(),
-      timeOfWithdrawal: DateFormat('yyyy-MM-dd HH:mm:ss')
+      timeOfWithdrawal: payment['timeofwithdrawal'] == null ? null : DateFormat('yyyy-MM-dd HH:mm:ss')
           .parseUTC(payment['timeofwithdrawal'])
           .toLocal(),
     );
