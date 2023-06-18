@@ -28,6 +28,43 @@ class UserDBMethods {
     }
   }
 
+  Future<List<AppUser>> getUsers() async {
+    try {
+      final userMaps = await supabase.client
+          .from('users')
+          .select<List<Map<String, dynamic>>>();
+
+      final users = userMaps.map((e) => AppUser.fromJson(e)).toList();
+
+      return users;
+    } on PostgrestException catch (e) {
+      print(e);
+      return [];
+    } catch (e) {
+      print(e);
+      return [];
+    }
+  }
+
+  Future<List<AppUser>> getUsersPerIds(List<String> ids) async {
+    try {
+      final userMaps = await supabase.client
+          .from('users')
+          .select<List<Map<String, dynamic>>>()
+          .in_('userid', ids);
+
+      final users = userMaps.map((e) => AppUser.fromJson(e)).toList();
+
+      return users;
+    } on PostgrestException catch (e) {
+      print(e);
+      return [];
+    } catch (e) {
+      print(e);
+      return [];
+    }
+  }
+
   Future<void> updateUser(Map<String, dynamic> userData, String id) async {
     try {
       await supabase.client.from('users').update(userData).eq('userid', id);

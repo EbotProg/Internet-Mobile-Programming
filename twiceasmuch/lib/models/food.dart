@@ -1,21 +1,23 @@
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:twiceasmuch/enums/food_state.dart';
 import 'package:twiceasmuch/models/user.dart';
 
 class Food {
-  final String? name;
-  final String? donorID;
-  final int? foodID;
-  final String? image;
-  final DateTime? uploadedAt;
-  final DateTime? expiryDate;
-  final String? location;
-  final int? quantity;
-  final FoodState state;
-  final num? discountPrice;
-  final bool sold;
+  String? name;
+  String? donorID;
+  int? foodID;
+  String? image;
+  DateTime? uploadedAt;
+  DateTime? expiryDate;
+  String? location;
+  int? quantity;
+  FoodState state;
+  num? discountPrice;
+  bool sold;
 
   AppUser? donor;
+  XFile? imageFile;
 
   Food(
       {this.name,
