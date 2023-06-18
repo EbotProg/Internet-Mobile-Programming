@@ -3,7 +3,7 @@ import 'package:twiceasmuch/models/user.dart';
 
 class Chat {
   List<Message> messages;
-  User user;
+  AppUser user;
 
   Chat({
     required this.messages,
