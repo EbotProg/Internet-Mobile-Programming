@@ -1,5 +1,4 @@
 import 'package:intl/intl.dart';
-import 'package:twiceasmuch/enums/food_state.dart';
 import 'package:twiceasmuch/models/food.dart';
 import 'package:twiceasmuch/models/user.dart';
 
@@ -10,6 +9,7 @@ class Message {
   final String? content;
   final DateTime? timeSent;
   final int? foodID;
+  final bool? isRead;
 
   User? sender;
   User? receiver;
@@ -22,6 +22,7 @@ class Message {
     this.receiverID,
     this.content,
     this.timeSent,
+    this.isRead,
   });
 
   factory Message.fromJson(Map<String, dynamic> json) {
@@ -34,6 +35,7 @@ class Message {
           .parseUTC(json['uploadedAt'])
           .toLocal(),
       content: json['content'],
+      isRead: json['isRead'],
     );
   }
 
@@ -47,6 +49,7 @@ class Message {
         (timeSent ?? DateTime.now()).toUtc(),
       ),
       "content": content,
+      "isRead": isRead,
     };
   }
 }
