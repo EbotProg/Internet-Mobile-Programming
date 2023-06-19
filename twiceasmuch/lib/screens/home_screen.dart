@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:twiceasmuch/db/user_db_methods.dart';
+import 'package:twiceasmuch/global.dart';
 import 'package:twiceasmuch/screens/account_screen.dart';
 import 'package:twiceasmuch/screens/chats_screen.dart';
 import 'package:twiceasmuch/screens/list_of_uploads/list_of_uploads.dart';
@@ -16,6 +18,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int index = 0;
+  bool loading = true;
 
   final screens = [
     const StarterScreen(),
@@ -32,6 +35,20 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    init();
+  }
+
+  void init() async {
+    globalUser ??= await UserDBMethods().getCurrenUser();
+    setState(() {
+      loading = false;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -46,8 +63,25 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         leading: IconButton(
-          icon: const CircleAvatar(
-            foregroundImage: AssetImage('assets/Ellipse 4.png'),
+          icon: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(150),
+            ),
+            clipBehavior: Clip.hardEdge,
+            height: 150,
+            width: 150,
+            child: AspectRatio(
+              aspectRatio: 3 / 4,
+              child: globalUser?.picture != null
+                  ? Image.network(
+                      globalUser!.picture!,
+                      fit: BoxFit.cover,
+                    )
+                  : Image.asset(
+                      'assets/profile.png',
+                      fit: BoxFit.cover,
+                    ),
+            ),
           ),
           onPressed: () {
             Navigator.of(context).push(
@@ -59,25 +93,30 @@ class _HomeScreenState extends State<HomeScreen> {
           tooltip: 'Account',
         ),
         actions: [
-          IconButton(
-            icon: const Icon(
-              Icons.notifications,
-              color: Color(0xff20B970),
+          if (!loading)
+            IconButton(
+              icon: const Icon(
+                Icons.notifications,
+                color: Color(0xff20B970),
+              ),
+              iconSize: 35,
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const NotificationsScreen(),
+                  ),
+                );
+              },
+              tooltip: 'Notifications',
             ),
-            iconSize: 35,
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => const NotificationsScreen(),
-                ),
-              );
-            },
-            tooltip: 'Notifications',
-          ),
           const SizedBox(width: 10),
         ],
       ),
-      body: screens[index],
+      body: loading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : screens[index],
       floatingActionButton: index == 1
           ? FloatingActionButton(
               child: const Icon(Icons.upload),

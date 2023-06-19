@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:twiceasmuch/screens/sign_up_screen.dart';
+import 'package:twiceasmuch/state.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,7 +27,8 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: const SignUpScreen(),
+      debugShowCheckedModeBanner: false,
+      home: const AuthStateManager(),
     );
   }
 }

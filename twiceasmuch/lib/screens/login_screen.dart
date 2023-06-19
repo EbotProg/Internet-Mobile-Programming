@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:twiceasmuch/auth/user_auth.dart';
 import 'package:twiceasmuch/screens/home_screen.dart';
 import 'package:twiceasmuch/screens/sign_up_screen.dart';
 import 'package:twiceasmuch/utilities/sign_in_utils.dart';
+import 'package:twiceasmuch/utilities/snackbar_utils.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -46,6 +48,7 @@ class _LoginScreenState extends State<LoginScreen> {
         height: height - 250,
         child: SingleChildScrollView(
           child: Form(
+            key: signInKey,
             child: Column(children: [
               const SizedBox(height: 30),
               const Text(
@@ -74,7 +77,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   passwordSignInFocus!.requestFocus();
                 },
                 decoration: const InputDecoration(
-                  label: Text('email'),
+                  label: Text('Email'),
                   border: OutlineInputBorder(),
                   fillColor: Color(0xffECECEC),
                 ),
@@ -101,17 +104,45 @@ class _LoginScreenState extends State<LoginScreen> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                  onPressed: () {
-                    if (signInKey.currentState!.validate()) {
-                      isLoading = true;
-                      setState(() {});
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
-                          builder: (context) => const HomeScreen(),
-                        ),
-                      );
-                    }
-                  },
+                  onPressed: isLoading
+                      ? () {}
+                      : () async {
+                          if (signInKey.currentState!.validate()) {
+                            setState(() {
+                              isLoading = true;
+                            });
+                            final result = await UserAuthentication()
+                                .signInWithEmailAndPassword(
+                              emailSignInController!.text,
+                              passwordSignInController!.text,
+                            );
+
+                            if (result == null) {
+                              snackbarError(
+                                title: 'Incorrect credentials',
+                                context: context,
+                              );
+                              setState(() {
+                                isLoading = false;
+                              });
+                              return;
+                            }
+                            snackbarSuccessful(
+                              title: 'Login successful',
+                              context: context,
+                            );
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (context) => const HomeScreen(),
+                              ),
+                            );
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (context) => const HomeScreen(),
+                              ),
+                            );
+                          }
+                        },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xff20B970),
                     shape: RoundedRectangleBorder(

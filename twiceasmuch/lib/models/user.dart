@@ -1,3 +1,6 @@
+import 'package:image_picker/image_picker.dart';
+import 'package:twiceasmuch/enums/user_type.dart';
+
 class AppUser {
   AppUser({
     this.userID,
@@ -6,7 +9,7 @@ class AppUser {
     this.location,
     this.verificationStatus = false,
     this.rating,
-    this.isDonor = false,
+    this.userType = UserType.user,
     this.picture,
     this.phoneNumber,
   });
@@ -17,9 +20,11 @@ class AppUser {
   String? location;
   bool verificationStatus;
   double? rating;
-  bool isDonor;
+  UserType userType;
   String? picture;
   String? phoneNumber;
+
+  XFile? imageFile;
 
   Map<String, dynamic> toJson() {
     return {
@@ -29,7 +34,7 @@ class AppUser {
       'location': location,
       'verificationstatus': verificationStatus,
       'rating': rating,
-      'isdonor': isDonor,
+      'isdonor': userType == UserType.donor,
       'picture': picture,
       'phonenumber': phoneNumber,
     };
@@ -43,7 +48,7 @@ class AppUser {
       location: user['location'],
       verificationStatus: user['verificationstatus'],
       rating: user['rating'],
-      isDonor: user['isdonor'],
+      userType: user['isdonor'] ? UserType.donor : UserType.user,
       picture: user['picture'],
       phoneNumber: user['phonenumber'],
     );
@@ -51,6 +56,6 @@ class AppUser {
 
   @override
   String toString() {
-    return "{userid: $userID, username: $username, email: $email,  location: $location, verificationstatus: $verificationStatus,  rating: $rating, isDonor: $isDonor, picture: $picture }";
+    return "{userid: $userID, username: $username, email: $email,  location: $location, verificationstatus: $verificationStatus,  rating: $rating, isDonor: ${userType == UserType.donor}, picture: $picture }";
   }
 }
