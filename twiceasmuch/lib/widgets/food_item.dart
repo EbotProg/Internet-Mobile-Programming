@@ -1,21 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:twiceasmuch/models/food.dart';
+import 'package:twiceasmuch/utilities/date_diff.dart';
 
-import 'food_screen.dart';
+import '../screens/food_screen.dart';
 
 class FoodItem extends StatelessWidget {
+  final Food food;
   const FoodItem({
     super.key,
-    required this.context,
+    required this.food,
   });
-
-  final BuildContext context;
 
   @override
   Widget build(BuildContext context) => InkWell(
         onTap: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => const FoodScreen(),
+              builder: (context) => FoodScreen(
+                food: food,
+              ),
             ),
           );
         },
@@ -31,8 +34,8 @@ class FoodItem extends StatelessWidget {
             children: [
               AspectRatio(
                 aspectRatio: 3 / 4,
-                child: Image.asset(
-                  'assets/Rectangle 1.png',
+                child: Image.network(
+                  food.image ?? '',
                   fit: BoxFit.cover,
                   alignment: Alignment.center,
                 ),
@@ -42,31 +45,31 @@ class FoodItem extends StatelessWidget {
                   horizontal: 10,
                   vertical: 10,
                 ),
-                child: const Column(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Spaghetti',
-                      style: TextStyle(
+                      food.name ?? '',
+                      style: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
                         fontSize: 17,
                       ),
                       textAlign: TextAlign.left,
                     ),
-                    SizedBox(height: 5),
+                    const SizedBox(height: 5),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'by Larry',
-                          style: TextStyle(
+                          'by ${food.donor?.username ?? ''}',
+                          style: const TextStyle(
                             color: Colors.white,
                           ),
                         ),
                         Text(
-                          '10 mins ago',
-                          style: TextStyle(
+                          food.uploadedAt!.currentTimelapseString(),
+                          style: const TextStyle(
                             color: Colors.white,
                           ),
                         ),

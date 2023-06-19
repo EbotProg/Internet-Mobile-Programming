@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:twiceasmuch/models/food.dart';
 
 class FoodScreen extends StatelessWidget {
-  const FoodScreen({super.key});
+  final Food food;
+  const FoodScreen({super.key, required this.food});
 
   @override
   Widget build(BuildContext context) {
@@ -25,9 +28,10 @@ class FoodScreen extends StatelessWidget {
             Container(
               height: height * 0.3,
               width: width,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                   image: DecorationImage(
-                      image: AssetImage('assets/eru.png'), fit: BoxFit.cover)),
+                      image: NetworkImage(food.image ?? ''),
+                      fit: BoxFit.cover)),
             ),
             Expanded(
               child: Container(
@@ -41,8 +45,8 @@ class FoodScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text("Fufu and Eru",
-                          style: TextStyle(
+                      Text(food.name ?? '',
+                          style: const TextStyle(
                               fontSize: 30, fontWeight: FontWeight.bold)),
                       const SizedBox(height: 10),
                       Row(
@@ -51,25 +55,36 @@ class FoodScreen extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              CircleAvatar(
-                                child: Container(
-                                  decoration: const BoxDecoration(
-                                      image: DecorationImage(
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(25),
+                                ),
+                                clipBehavior: Clip.hardEdge,
+                                height: 50,
+                                width: 50,
+                                child: AspectRatio(
+                                  aspectRatio: 3 / 4,
+                                  child: food.donor?.picture != null
+                                      ? Image.network(
+                                          food.donor!.picture!,
                                           fit: BoxFit.cover,
-                                          image:
-                                              AssetImage('assets/zele.png'))),
+                                        )
+                                      : Image.asset(
+                                          'assets/profile.png',
+                                          fit: BoxFit.cover,
+                                        ),
                                 ),
                               ),
                               const SizedBox(
                                 width: 10,
                               ),
-                              const Text("Big \nZele"),
+                              Text(food.donor?.username ?? ''),
                             ],
                           ),
                           const Text("\t | \t"),
-                          const Text(
-                            "Feb 14 2022 \n 7:45 pm",
-                            style: TextStyle(fontSize: 11, color: Colors.grey),
+                          Text(
+                            "${DateFormat('MMM dd yyyy').format(food.uploadedAt!)}\n${DateFormat.jm().format(food.uploadedAt!)}",
+                            style: const TextStyle(fontSize: 11, color: Colors.grey),
                           ),
                         ],
                       ),
@@ -168,9 +183,12 @@ class FoodScreen extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(10),
                               ),
                             ),
-                            child: const Text(
-                              'Get Free',
-                              style: TextStyle(
+                            child: Text(
+                              food.discountPrice == null ||
+                                      food.discountPrice == 0
+                                  ? 'Get Free'
+                                  : 'Get for ${food.discountPrice!} FCFA',
+                              style: const TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 18,
@@ -181,13 +199,13 @@ class FoodScreen extends StatelessWidget {
                       ),
                       IconButton(
                           onPressed: () {},
-                          icon: const Row(
+                          icon: Row(
                             children: [
-                              Icon(Icons.message_outlined),
-                              SizedBox(
+                              const Icon(Icons.message_outlined),
+                              const SizedBox(
                                 width: 10,
                               ),
-                              Text("Message Big Zele")
+                              Text("Message ${food.donor?.username ?? ''}")
                             ],
                           ))
                     ],
@@ -198,44 +216,47 @@ class FoodScreen extends StatelessWidget {
             Expanded(
               child: Container(
                 color: const Color.fromARGB(255, 226, 230, 231),
-                child: const Padding(
-                  padding: EdgeInsets.all(8.0),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      const Text(
                         "More Info",
                         style: TextStyle(
                             fontSize: 25, fontWeight: FontWeight.bold),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
+                          const Text(
                             "Expiry Date",
                             style: TextStyle(fontSize: 20),
                           ),
-                          Text("Feb 15 2022")
+                          Text(food.expiryDate == null
+                              ? 'No expiry date'
+                              : DateFormat('MMM dd yyyy')
+                                  .format(food.expiryDate!))
                         ],
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
+                          const Text(
                             "Location ",
                             style: TextStyle(fontSize: 18),
                           ),
-                          Text("Buea")
+                          Text(food.donor?.location ?? '')
                         ],
                       ),
-                      Row(
+                      const Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "User ratig",
+                            "User rating",
                             style: TextStyle(fontSize: 18),
                           ),
                           Text("4.6/5")
@@ -244,31 +265,36 @@ class FoodScreen extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
+                          const Text(
                             "Quantity",
                             style: TextStyle(fontSize: 18),
                           ),
-                          Text("1 plate(2)")
+                          Text("${food.quantity ?? 1} plate(s)")
                         ],
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
+                          const Text(
                             "State",
                             style: TextStyle(fontSize: 18),
                           ),
-                          Text("Cooked")
+                          Text(food.state.displayString())
                         ],
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
+                          const Text(
                             "Price",
                             style: TextStyle(fontSize: 18),
                           ),
-                          Text("Free")
+                          Text(
+                            food.discountPrice == null ||
+                                    food.discountPrice == 0
+                                ? "Free"
+                                : '${food.discountPrice!}FCFA',
+                          )
                         ],
                       ),
                     ],

@@ -83,12 +83,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
             ),
           ),
-          onPressed: () {
-            Navigator.of(context).push(
+          onPressed: () async {
+            await Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) => const AccountScreen(),
               ),
             );
+            setState(() {});
           },
           tooltip: 'Account',
         ),
