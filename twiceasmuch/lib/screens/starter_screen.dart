@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:twiceasmuch/db/food_db_methods.dart';
+import 'package:twiceasmuch/enums/food_state.dart';
 import 'package:twiceasmuch/global.dart';
 import 'package:twiceasmuch/models/food.dart';
 import 'package:twiceasmuch/widgets/food_item.dart';
@@ -16,11 +17,14 @@ class _StarterScreenState extends State<StarterScreen> {
   List<Food> trending = [];
   List<Food> foods = [];
   List<Food> recommended = [];
+  List<Food> searched = [];
   bool loading = true;
+  TextEditingController? searchController;
 
   @override
   void initState() {
     super.initState();
+    searchController = TextEditingController();
     init();
   }
 
@@ -43,6 +47,12 @@ class _StarterScreenState extends State<StarterScreen> {
       recommended = results[1];
       loading = false;
     });
+  }
+
+  @override
+  void dispose() {
+    searchController!.dispose();
+    super.dispose();
   }
 
   @override
@@ -83,10 +93,18 @@ class _StarterScreenState extends State<StarterScreen> {
                 ),
               ),
               const SizedBox(height: 10),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: TextField(
-                  decoration: InputDecoration(
+                  controller: searchController,
+                  onChanged: (val) async {
+                    searched = [];
+                    setState(() {});
+                    searched = await FoodDBMethods().searchFoods(
+                        value: val.split(' ').first, foodState: FoodState.raw);
+                    setState(() {});
+                  },
+                  decoration: const InputDecoration(
                     prefixIcon: Icon(Icons.search),
                     border: OutlineInputBorder(),
                     label: Text('Search Food'),
@@ -94,52 +112,75 @@ class _StarterScreenState extends State<StarterScreen> {
                 ),
               ),
               const SizedBox(height: 30),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15),
-                child: Text(
-                  'Trending Meals',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 10),
-              SizedBox(
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      const SizedBox(width: 7.5),
-                      ...List.generate(
-                        trending.length,
-                        (i) => FoodItem(
-                          food: trending[i],
+              searchController!.text.isEmpty
+                  ? Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 15),
+                          child: Text(
+                            'Trending Meals',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 30),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15),
-                child: Text(
-                  'Recent Meals',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
-              ...List.generate(
-                trending.length,
-                (i) => RecentMealFood(
-                  food: trending[i],
-                ),
-              ),
+                        const SizedBox(height: 10),
+                        SizedBox(
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              children: [
+                                const SizedBox(width: 7.5),
+                                ...List.generate(
+                                  trending.length,
+                                  (i) => FoodItem(
+                                    food: trending[i],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 30),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 15),
+                          child: Text(
+                            'Recent Meals',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                        ...List.generate(
+                          trending.length,
+                          (i) => RecentMealFood(
+                            food: trending[i],
+                          ),
+                        ),
+                      ],
+                    )
+                  : searched.isEmpty
+                      ? const Center(
+                          child: CircularProgressIndicator(
+                            color: Colors.green,
+                          ),
+                        )
+                      : Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ...List.generate(
+                                searched.length,
+                                (index) =>
+                                    RecentMealFood(food: searched[index]))
+                          ],
+                        )
             ],
           ),
         ),

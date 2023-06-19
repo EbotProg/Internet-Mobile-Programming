@@ -260,51 +260,45 @@ class _UploadFoodScreenState extends State<UploadFoodScreen> {
                 ),
                 const SizedBox(height: 15),
 
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.grey.withOpacity(.2),
-                  ),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 5,
-                  ),
-                  child: DropdownButtonHideUnderline(
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: DropdownButtonFormField(
-                        validator: (val) {
-                          if (val == FoodPrice.none) {
-                            return 'Please chose whether free or set price';
-                          }
-                          return null;
-                        },
-                        value: foodprice,
-                        items: const [
-                          DropdownMenuItem(
-                            value: FoodPrice.none,
-                            child: Text('Set food cost'),
-                          ),
-                          DropdownMenuItem(
-                            value: FoodPrice.discount,
-                            child: Text(
-                              'Discounted Price',
-                              style: TextStyle(color: Color(0xff20B970)),
-                            ),
-                          ),
-                          DropdownMenuItem(
-                            value: FoodPrice.free,
-                            child: Text(
-                              'Free food',
-                              style: TextStyle(color: Color(0xff20B970)),
-                            ),
-                          ),
-                        ],
-                        onChanged: (value) {
-                          foodprice = value!;
-                          setState(() {});
-                        },
-                      ),
+                SizedBox(
+                  width: double.infinity,
+                  child: DropdownButtonFormField(
+                    decoration: const InputDecoration(
+                      label: Text('Food Cost'),
+                      border: OutlineInputBorder(),
+                      fillColor: Color(0xffECECEC),
                     ),
+                    validator: (val) {
+                      if (val == FoodPrice.none) {
+                        return 'Please chose whether free or set price';
+                      }
+                      return null;
+                    },
+                    value: foodprice,
+                    items: const [
+                      DropdownMenuItem(
+                        value: FoodPrice.none,
+                        child: Text('Set food cost'),
+                      ),
+                      DropdownMenuItem(
+                        value: FoodPrice.discount,
+                        child: Text(
+                          'Discounted Price',
+                          style: TextStyle(color: Color(0xff20B970)),
+                        ),
+                      ),
+                      DropdownMenuItem(
+                        value: FoodPrice.free,
+                        child: Text(
+                          'Free food',
+                          style: TextStyle(color: Color(0xff20B970)),
+                        ),
+                      ),
+                    ],
+                    onChanged: (value) {
+                      foodprice = value!;
+                      setState(() {});
+                    },
                   ),
                 ),
                 const SizedBox(
@@ -325,48 +319,42 @@ class _UploadFoodScreenState extends State<UploadFoodScreen> {
                       )
                     : const SizedBox(),
                 const SizedBox(height: 15),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.grey.withOpacity(.2),
-                  ),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 5,
-                  ),
-                  child: DropdownButtonHideUnderline(
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: DropdownButtonFormField(
-                        validator: (val) {
-                          if (val == FoodState.none) {
-                            return 'Please select state of food';
-                          }
-                          return null;
-                        },
-                        value: foodState,
-                        items: const [
-                          DropdownMenuItem(
-                            value: FoodState.none,
-                            child: Text('State of Food e.g Raw or Cooked'),
-                          ),
-                          DropdownMenuItem(
-                            value: FoodState.cooked,
-                            child: Text('Cooked Food',
-                                style: TextStyle(color: Color(0xff20B970))),
-                          ),
-                          DropdownMenuItem(
-                            value: FoodState.raw,
-                            child: Text('Raw Food',
-                                style: TextStyle(color: Color(0xff20B970))),
-                          ),
-                        ],
-                        onChanged: (value) {
-                          setState(() {
-                            foodState = value!;
-                          });
-                        },
-                      ),
+                SizedBox(
+                  width: double.infinity,
+                  child: DropdownButtonFormField(
+                    decoration: const InputDecoration(
+                      label: Text('Food state'),
+                      border: OutlineInputBorder(),
+                      fillColor: Color(0xffECECEC),
                     ),
+                    validator: (val) {
+                      if (val == FoodState.none) {
+                        return 'Please select state of food';
+                      }
+                      return null;
+                    },
+                    value: foodState,
+                    items: const [
+                      DropdownMenuItem(
+                        value: FoodState.none,
+                        child: Text('State of Food e.g Raw or Cooked'),
+                      ),
+                      DropdownMenuItem(
+                        value: FoodState.cooked,
+                        child: Text('Cooked Food',
+                            style: TextStyle(color: Color(0xff20B970))),
+                      ),
+                      DropdownMenuItem(
+                        value: FoodState.raw,
+                        child: Text('Raw Food',
+                            style: TextStyle(color: Color(0xff20B970))),
+                      ),
+                    ],
+                    onChanged: (value) {
+                      setState(() {
+                        foodState = value!;
+                      });
+                    },
                   ),
                 ),
                 // Text('Quantity')

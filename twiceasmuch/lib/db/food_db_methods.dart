@@ -113,12 +113,13 @@ class FoodDBMethods {
           .from('food')
           .select<List<Map<String, dynamic>>>()
           .textSearch('name', value)
-          .contains('state', foodState.toString())
+          .eq('state', foodState.toString())
           .order('uploadedAt');
 
       final users = await UserDBMethods().getUsers();
 
       final foods = foodMaps.map((e) => Food.fromJson(e)).toList();
+      print(foods);
 
       for (var food in foods) {
         food.donor = users.firstWhere(
