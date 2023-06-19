@@ -1,3 +1,4 @@
+import 'package:image_picker/image_picker.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:twiceasmuch/models/user.dart';
 
@@ -11,6 +12,20 @@ class UserDBMethods {
     } on PostgrestException catch (e) {
       print(e);
       return;
+    }
+  }
+
+  Future<AppUser?> getCurrenUser() async {
+    try {
+      final user = await supabase.client
+          .from('users')
+          .select()
+          .eq('userid', supabase.client.auth.currentUser!.id)
+          .single() as Map<String, dynamic>;
+      return AppUser.fromJson(user);
+    } on PostgrestException catch (e) {
+      print(e);
+      return null;
     }
   }
 
@@ -65,12 +80,36 @@ class UserDBMethods {
     }
   }
 
-  Future<void> updateUser(Map<String, dynamic> userData, String id) async {
+  Future<void> updateUser(AppUser user) async {
     try {
-      await supabase.client.from('users').update(userData).eq('userid', id);
+      if (user.imageFile != null) {
+        user.picture = await _uploadImage(user.imageFile!);
+      }
+
+      await supabase.client
+          .from('users')
+          .update(user.toJson())
+          .eq('userid', user.userID);
       return;
     } on PostgrestException catch (e) {
       print(e);
+    }
+  }
+
+  Future<String?> _uploadImage(XFile image) async {
+    try {
+      final bytes = await image.readAsBytes();
+      final fileName = image.name;
+      await supabase.client.storage
+          .from('userImages')
+          .uploadBinary(fileName, bytes);
+      final imageUrl = await supabase.client.storage
+          .from('userImages')
+          .createSignedUrl(fileName, 60 * 60 * 24 * 365 * 10);
+      return imageUrl;
+    } on StorageException catch (e) {
+      print(e);
+      return null;
     }
   }
 }

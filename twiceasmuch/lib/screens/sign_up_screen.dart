@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:twiceasmuch/auth/user_auth.dart';
-import 'package:twiceasmuch/enums/user_status.dart';
+import 'package:twiceasmuch/enums/user_type.dart';
 import 'package:twiceasmuch/models/user.dart';
 import 'package:twiceasmuch/screens/home_screen.dart';
 import 'package:twiceasmuch/screens/login_screen.dart';
 import 'package:twiceasmuch/utilities/sign_up_utils.dart';
+import 'package:twiceasmuch/utilities/snackbar_utils.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -14,19 +15,22 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  var dropDownValue = UserStatus.none;
-  bool isloading = false;
-  final auth = UserAuthentication();
+  UserType? userType;
+  bool registering = false;
 
   @override
   void initState() {
     nameSignUpController = TextEditingController();
     emailSignUpController = TextEditingController();
+    locationController = TextEditingController();
+    phoneNumberController = TextEditingController();
     passwordSignUpController = TextEditingController();
     confirmPasswordSignUpController = TextEditingController();
 
     nameSignUpFocus = FocusNode();
     emailSignUpFocus = FocusNode();
+    locationSignUpFocus = FocusNode();
+    phoneNumberSignUpFocus = FocusNode();
     passwordSignUpFocus = FocusNode();
     confirmPasswordSignUpFocus = FocusNode();
 
@@ -39,10 +43,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
     nameSignUpController!.dispose();
     passwordSignUpController!.dispose();
     confirmPasswordSignUpController!.dispose();
+    locationController!.dispose();
+    phoneNumberController!.dispose();
     emailSignUpFocus!.dispose();
     nameSignUpFocus!.dispose();
     passwordSignUpFocus!.dispose();
     confirmPasswordSignUpFocus!.dispose();
+    locationSignUpFocus!.dispose();
+    phoneNumberSignUpFocus!.dispose();
 
     super.dispose();
   }
@@ -75,6 +83,40 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
               ),
               const SizedBox(height: 30),
+              DropdownButtonFormField<UserType>(
+                value: userType,
+                hint: const Text('Select User Type'),
+                items: [
+                  ...UserType.values.map((e) {
+                    return DropdownMenuItem(
+                      value: e,
+                      child: Text(e.displayString()),
+                    );
+                  }).toList(),
+                ],
+                onChanged: (value) {
+                  setState(() {
+                    userType = value;
+                  });
+                },
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                decoration: const InputDecoration(
+                  label: Text('User Type'),
+                  border: OutlineInputBorder(),
+                  fillColor: Color(0xffECECEC),
+                ),
+                validator: (input) {
+                  if (input == null) {
+                    return 'please select your user type';
+                  }
+
+                  return null;
+                },
+                onSaved: (_) {
+                  nameSignUpFocus!.requestFocus();
+                },
+              ),
+              const SizedBox(height: 20),
               TextFormField(
                 controller: nameSignUpController,
                 focusNode: nameSignUpFocus,
@@ -94,12 +136,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   border: OutlineInputBorder(),
                   fillColor: Color(0xffECECEC),
                 ),
+                autovalidateMode: AutovalidateMode.onUserInteraction,
               ),
               const SizedBox(height: 20),
               TextFormField(
                 controller: emailSignUpController,
                 focusNode: emailSignUpFocus,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
+                onFieldSubmitted: (_) {
+                  phoneNumberSignUpFocus!.requestFocus();
+                },
                 validator: (input) {
                   if (input!.isEmpty) {
                     return 'Please enter an email';
@@ -118,37 +164,57 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
                 keyboardType: TextInputType.emailAddress,
               ),
-              const SizedBox(height: 20),
-              DropdownButtonFormField(
-                decoration: const InputDecoration(border: OutlineInputBorder()),
-                value: dropDownValue,
-                validator: (val) {
-                  if (val == UserStatus.none) {
-                    return 'Please select status';
-                  }
-                  return null;
-                },
-                items: const [
-                  DropdownMenuItem(
-                    value: UserStatus.none,
-                    child: Text("None"),
+              if (userType == UserType.donor) ...[
+                const SizedBox(height: 20),
+                TextFormField(
+                  controller: phoneNumberController,
+                  focusNode: phoneNumberSignUpFocus,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  validator: (input) {
+                    if (input!.isEmpty) {
+                      return 'Please enter a phone number';
+                    }
+
+                    return null;
+                  },
+                  decoration: const InputDecoration(
+                    label: Text('Phone number'),
+                    border: OutlineInputBorder(),
+                    fillColor: Color(0xffECECEC),
                   ),
-                  DropdownMenuItem(
-                    value: UserStatus.user,
-                    child: Text("user"),
+                  keyboardType: TextInputType.phone,
+                  onFieldSubmitted: (_) {
+                    locationSignUpFocus!.requestFocus();
+                  },
+                ),
+                const SizedBox(height: 20),
+                TextFormField(
+                  controller: locationController,
+                  focusNode: locationSignUpFocus,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  onFieldSubmitted: (_) {
+                    passwordSignUpFocus!.requestFocus();
+                  },
+                  validator: (input) {
+                    if (input!.isEmpty) {
+                      return 'Please enter a location';
+                    }
+
+                    return null;
+                  },
+                  decoration: const InputDecoration(
+                    label: Text('Location'),
+                    border: OutlineInputBorder(),
+                    fillColor: Color(0xffECECEC),
                   ),
-                  DropdownMenuItem(
-                      value: UserStatus.donor, child: Text("donor")),
-                ],
-                onChanged: (value) {
-                  dropDownValue = value!;
-                  setState(() {});
-                },
-              ),
+                  keyboardType: TextInputType.text,
+                ),
+              ],
               const SizedBox(height: 20),
               TextFormField(
                 controller: passwordSignUpController,
                 focusNode: passwordSignUpFocus,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
                 onFieldSubmitted: (_) {
                   confirmPasswordSignUpFocus!.requestFocus();
                 },
@@ -195,30 +261,60 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                  onPressed: () async {
-                    if (signUpKey.currentState!.validate()) {
-                      setState(() {
-                        isloading = true;
-                      });
-                      await auth.signUpEmailAndPassword(
-                          AppUser(
-                              email: emailSignUpController!.text,
-                              username: nameSignUpController!.text),
-                          passwordSignUpController!.text);
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
-                          builder: (context) => const HomeScreen(),
-                        ),
-                      );
-                    }
-                  },
+                  onPressed: registering
+                      ? () {}
+                      : () async {
+                          if (signUpKey.currentState!.validate()) {
+                            setState(() {
+                              registering = true;
+                            });
+                            final result = await UserAuthentication()
+                                .signUpEmailAndPassword(
+                              AppUser(
+                                email: emailSignUpController!.text,
+                                location: userType == UserType.donor
+                                    ? locationController!.text
+                                    : null,
+                                phoneNumber: userType == UserType.donor
+                                    ? phoneNumberController!.text
+                                    : null,
+                                picture: null,
+                                rating: null,
+                                userType: userType!,
+                                username: nameSignUpController!.text,
+                                // verificationStatus: true,
+                              ),
+                              passwordSignUpController!.text,
+                            );
+
+                            if (result == null) {
+                              snackbarError(
+                                title: 'Registration error',
+                                context: context,
+                              );
+                              setState(() {
+                                registering = false;
+                              });
+                              return;
+                            }
+                            snackbarSuccessful(
+                              title: 'Registration successful',
+                              context: context,
+                            );
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (context) => const HomeScreen(),
+                              ),
+                            );
+                          }
+                        },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xff20B970),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  child: isloading
+                  child: registering
                       ? const CircularProgressIndicator(
                           color: Colors.white,
                           strokeWidth: 2.0,

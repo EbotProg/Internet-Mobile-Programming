@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:twiceasmuch/auth_manager.dart';
+import 'package:twiceasmuch/state.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,7 +27,8 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: const AuthManager(),
+      debugShowCheckedModeBanner: false,
+      home: const AuthStateManager(),
     );
   }
 }
