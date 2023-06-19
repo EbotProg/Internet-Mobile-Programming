@@ -1,4 +1,5 @@
 enum FoodState {
+  none,
   cooked,
   raw;
 

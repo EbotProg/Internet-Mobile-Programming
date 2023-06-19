@@ -238,7 +238,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 controller: confirmPasswordSignUpController,
                 focusNode: confirmPasswordSignUpFocus,
                 onFieldSubmitted: (_) {
-                  FocusScope.of(context).requestFocus();
+                  confirmPasswordSignUpFocus!.unfocus();
                 },
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 validator: (input) {

@@ -13,6 +13,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final auth = UserAuthentication();
+  bool isloading = false;
   @override
   void initState() {
     emailSignInController = TextEditingController();

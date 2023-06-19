@@ -54,7 +54,6 @@ class Food {
     return {
       "name": name,
       "donorid": donorID,
-      "foodid": foodID,
       "image": image,
       "uploadedAt": DateFormat('yyyy-MM-dd HH:mm:ss').format(
         (uploadedAt ?? DateTime.now()).toUtc(),

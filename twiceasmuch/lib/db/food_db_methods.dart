@@ -222,19 +222,21 @@ class FoodDBMethods {
     }
   }
 
-  Future<void> uploadFood(Food food) async {
+  Future<String?> uploadFood(Food food) async {
     try {
       if (food.imageFile != null) {
         food.image = await _uploadImage(food.imageFile!);
       }
 
       await supabaseInstance.client.from('food').insert(food.toJson());
+      print('success');
+      return 'successful upload';
     } on PostgrestException catch (e) {
       print(e);
-      return;
+      return e.toString();
     } catch (e) {
       print(e);
-      return;
+      return e.toString();
     }
   }
 
