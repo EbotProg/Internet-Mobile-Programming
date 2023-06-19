@@ -13,7 +13,7 @@ class FoodDBMethods {
           .from('food')
           .select<List<Map<String, dynamic>>>()
           .eq('sold', false)
-          .order('uploadedAt');
+          .order('uploadedAt', ascending: true);
       final users = await UserDBMethods().getUsers();
 
       final foods = foodMaps.map((e) => Food.fromJson(e)).toList();
@@ -39,7 +39,7 @@ class FoodDBMethods {
           .from('food')
           .select<List<Map<String, dynamic>>>()
           .eq('sold', false)
-          .order('uploadedAt', ascending: true);
+          .order('uploadedAt', ascending: false);
       final users = await UserDBMethods().getUsers();
 
       final foods = foodMaps.map((e) => Food.fromJson(e)).toList();
@@ -65,7 +65,7 @@ class FoodDBMethods {
           .from('food')
           .select<List<Map<String, dynamic>>>()
           .eq('sold', false)
-          .order('uploadedAt', ascending: true);
+          .order('uploadedAt', ascending: false);
       final users = await UserDBMethods().getUsers();
 
       final foods = foodMaps.map((e) => Food.fromJson(e)).toList();
