@@ -38,11 +38,8 @@ class Food {
         donorID: json['donorid'],
         foodID: json['foodid'],
         image: json['image'],
-        uploadedAt: DateFormat('yyyy-MM-dd HH:mm:ss')
-            .parseUTC(json['uploadedAt'])
-            .toLocal(),
-        expiryDate:
-            DateFormat('yyyy-MM-dd').parseUTC(json['expirydate']).toLocal(),
+        uploadedAt: DateFormat('yyyy-MM-dd').parseUTC(json['uploadedAt']),
+        expiryDate: DateFormat('yyyy-MM-dd').parseUTC(json['expirydate']),
         quantity: json['quantity'],
         location: json['location'],
         discountPrice: json['discountprice'],

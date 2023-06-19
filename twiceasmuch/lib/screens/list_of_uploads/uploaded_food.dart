@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:twiceasmuch/models/food.dart';
+import 'package:twiceasmuch/widgets/dialog.dart';
 
 class UploadedFood extends StatelessWidget {
-  const UploadedFood({super.key});
+  const UploadedFood({super.key, this.food, this.deleteFood, this.editFood});
+  final Function? deleteFood;
+  final Function? editFood;
+  final Food? food;
 
   @override
   Widget build(BuildContext context) {
@@ -14,12 +19,18 @@ class UploadedFood extends StatelessWidget {
           children: [
             Container(
               height: 150,
-              decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: AssetImage('assets/eru.png'),
-                  )),
+              decoration: BoxDecoration(
+                  borderRadius:
+                      const BorderRadius.vertical(top: Radius.circular(10)),
+                  image: food!.image == null
+                      ? const DecorationImage(
+                          fit: BoxFit.cover,
+                          image: AssetImage('assets/eru.png'),
+                        )
+                      : DecorationImage(
+                          fit: BoxFit.cover,
+                          image: NetworkImage(food!.image!),
+                        )),
             ),
             Container(
               decoration: const BoxDecoration(
@@ -34,9 +45,9 @@ class UploadedFood extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Fufu and Eru',
-                    style: TextStyle(
+                  Text(
+                    food!.name!,
+                    style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                       fontSize: 17,
@@ -47,16 +58,30 @@ class UploadedFood extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
-                        '1000 fcfa',
-                        style: TextStyle(
+                      Text(
+                        '${food!.discountPrice!.toString()} fcfa',
+                        style: const TextStyle(
                           color: Colors.white,
                         ),
                       ),
                       Row(
                         children: [
                           IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return MyDialog(
+                                        title: 'Delete Food',
+                                        description:
+                                            'This will delete this item from the app',
+                                        onContinue: () {
+                                          deleteFood!();
+                                        },
+                                        continueText: 'Delete',
+                                        continueColor: Colors.red);
+                                  });
+                            },
                             icon: const Icon(
                               Icons.delete,
                               color: Colors.white,
@@ -64,7 +89,9 @@ class UploadedFood extends StatelessWidget {
                             ),
                           ),
                           IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              editFood!();
+                            },
                             icon: const Icon(
                               Icons.edit,
                               color: Colors.white,
@@ -75,6 +102,15 @@ class UploadedFood extends StatelessWidget {
                       ),
                     ],
                   ),
+                  food!.sold
+                      ? const Text(
+                          'Sold',
+                          style: TextStyle(color: Colors.white),
+                        )
+                      : const Text(
+                          'Not sold',
+                          style: TextStyle(color: Colors.red),
+                        )
                 ],
               ),
             ),

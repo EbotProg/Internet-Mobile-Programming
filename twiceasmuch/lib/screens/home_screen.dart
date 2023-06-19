@@ -22,7 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final screens = [
     const StarterScreen(),
-    const ListOfUploads(),
+    ListOfUploads(),
     const ChatsScreen(),
     const TrasactionsScreen(),
   ];
@@ -122,7 +122,9 @@ class _HomeScreenState extends State<HomeScreen> {
               child: const Icon(Icons.upload),
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(
-                  builder: (c) => const UploadFoodScreen(),
+                  builder: (c) => UploadFoodScreen(
+                    shouldEdit: false,
+                  ),
                 ));
               },
             )

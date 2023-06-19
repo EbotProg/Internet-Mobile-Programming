@@ -11,7 +11,9 @@ import 'package:twiceasmuch/models/food.dart';
 import 'package:twiceasmuch/utilities/snackbar_utils.dart';
 
 class UploadFoodScreen extends StatefulWidget {
-  const UploadFoodScreen({super.key});
+  const UploadFoodScreen({super.key, this.food, required this.shouldEdit});
+  final Food? food;
+  final bool shouldEdit;
 
   @override
   State<UploadFoodScreen> createState() => _UploadFoodScreenState();
@@ -20,6 +22,7 @@ class UploadFoodScreen extends StatefulWidget {
 class _UploadFoodScreenState extends State<UploadFoodScreen> {
   var foodprice = FoodPrice.none;
   var foodState = FoodState.none;
+  bool editing = false;
   bool isLoading = false;
   DateTime? _selectedDate;
   TextEditingController? dateController;
@@ -67,6 +70,22 @@ class _UploadFoodScreenState extends State<UploadFoodScreen> {
     quantityController = TextEditingController();
     priceController = TextEditingController();
     locationController = TextEditingController();
+
+    if (widget.shouldEdit) {
+      editing = widget.shouldEdit;
+      nameController!.text = widget.food!.name!;
+      dateController!.text = widget.food!.expiryDate!.toString();
+      quantityController!.text = widget.food!.quantity!.toString();
+      priceController!.text = widget.food!.discountPrice!.toString();
+      locationController!.text = widget.food!.location!;
+      if (widget.food!.discountPrice! > 0) {
+        foodprice = FoodPrice.discount;
+      } else {
+        foodprice = FoodPrice.free;
+      }
+      foodState = widget.food!.state;
+      setState(() {});
+    }
     super.initState();
   }
 
@@ -91,14 +110,23 @@ class _UploadFoodScreenState extends State<UploadFoodScreen> {
           },
           icon: const Icon(Icons.arrow_back_ios_rounded, color: Colors.white),
         ),
-        title: const Text(
-          'Upload Food',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+        title: widget.shouldEdit
+            ? const Text(
+                'Edit Food',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              )
+            : const Text(
+                'Upload Food',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
         centerTitle: false,
       ),
       body: SingleChildScrollView(
@@ -143,28 +171,8 @@ class _UploadFoodScreenState extends State<UploadFoodScreen> {
                     image = await imagePicker.selectPicture();
                     setState(() {});
                   },
-                  child: image == null
-                      ? Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              style: BorderStyle.solid,
-                              strokeAlign: 2,
-                              color: Colors.grey,
-                            ),
-                          ),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 15),
-                          child: const Row(
-                            children: [
-                              Icon(Icons.upload_file, size: 35),
-                              Text(
-                                'Upload Picture of Food',
-                                style: TextStyle(fontSize: 20),
-                              ),
-                            ],
-                          ),
-                        )
-                      : Column(
+                  child: editing
+                      ? Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
@@ -174,8 +182,8 @@ class _UploadFoodScreenState extends State<UploadFoodScreen> {
                               decoration: const BoxDecoration(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(20))),
-                              child: Image.file(
-                                File(image!.path),
+                              child: Image.network(
+                                widget.food!.image!,
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -188,13 +196,67 @@ class _UploadFoodScreenState extends State<UploadFoodScreen> {
                                 OutlinedButton(
                                     onPressed: () async {
                                       image = await imagePicker.selectPicture();
+                                      editing = false;
                                       setState(() {});
                                     },
                                     child: const Text("Change Image"))
                               ],
                             )
                           ],
-                        ),
+                        )
+                      : (image == null)
+                          ? Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  style: BorderStyle.solid,
+                                  strokeAlign: 2,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 15),
+                              child: const Row(
+                                children: [
+                                  Icon(Icons.upload_file, size: 35),
+                                  Text(
+                                    'Upload Picture of Food',
+                                    style: TextStyle(fontSize: 20),
+                                  ),
+                                ],
+                              ),
+                            )
+                          : Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Container(
+                                  width: 200,
+                                  height: 200,
+                                  decoration: const BoxDecoration(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(20))),
+                                  child: Image.file(
+                                    File(image!.path),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    OutlinedButton(
+                                        onPressed: () async {
+                                          image =
+                                              await imagePicker.selectPicture();
+                                          setState(() {});
+                                        },
+                                        child: const Text("Change Image"))
+                                  ],
+                                )
+                              ],
+                            ),
                 ),
                 const SizedBox(height: 15),
 
@@ -399,7 +461,12 @@ class _UploadFoodScreenState extends State<UploadFoodScreen> {
                                 : int.tryParse(priceController!.text));
                         food.imageFile = image;
                         setState(() {});
-                        final res = await db.uploadFood(food);
+                        var res;
+                        if (widget.shouldEdit) {
+                          res = await db.uploadFood(food);
+                        } else {
+                          res = await db.editFood(food);
+                        }
                         if (res == null) {
                           isLoading = false;
                           snackbarError(title: res!, context: context);

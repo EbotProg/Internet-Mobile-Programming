@@ -87,11 +87,13 @@ class FoodDBMethods {
       final foodMaps = await supabaseInstance.client
           .from('food')
           .select<List<Map<String, dynamic>>>()
-          .contains('donorid', userId)
+          .eq('donorid', userId)
           .order('uploadedAt');
 
       final foods = foodMaps.map((e) => Food.fromJson(e)).toList();
-
+      if (foods.isEmpty) {
+        return [Food(state: FoodState.none)];
+      }
       return foods;
     } on PostgrestException catch (e) {
       print(e);
@@ -203,7 +205,7 @@ class FoodDBMethods {
     }
   }
 
-  Future<void> editFood(Food food) async {
+  Future<String> editFood(Food food) async {
     try {
       if (food.imageFile != null) {
         food.image = await _uploadImage(food.imageFile!);
@@ -213,12 +215,13 @@ class FoodDBMethods {
           .from('food')
           .update(food.toJson())
           .eq('foodid', food.foodID);
+      return 'Successful Edit';
     } on PostgrestException catch (e) {
       print(e);
-      return;
+      return e.toString();
     } catch (e) {
       print(e);
-      return;
+      return e.toString();
     }
   }
 
