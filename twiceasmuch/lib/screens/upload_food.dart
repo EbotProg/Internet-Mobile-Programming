@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:twiceasmuch/enums/food_price.dart';
 
-class UploadFoodScreen extends StatelessWidget {
+class UploadFoodScreen extends StatefulWidget {
   const UploadFoodScreen({super.key});
 
+  @override
+  State<UploadFoodScreen> createState() => _UploadFoodScreenState();
+}
+
+class _UploadFoodScreenState extends State<UploadFoodScreen> {
+  var foodprice = FoodPrice.none;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,6 +80,56 @@ class UploadFoodScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 15),
+
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey.withOpacity(.2),
+                ),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 5,
+                ),
+                child: DropdownButtonHideUnderline(
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: DropdownButton(
+                      value: foodprice,
+                      items: const [
+                        DropdownMenuItem(
+                          value: FoodPrice.none,
+                          child: Text('Set food cost'),
+                        ),
+                        DropdownMenuItem(
+                          value: FoodPrice.discount,
+                          child: Text('Discounted Price'),
+                        ),
+                        DropdownMenuItem(
+                          value: FoodPrice.free,
+                          child: Text('Free food'),
+                        ),
+                      ],
+                      onChanged: (value) {
+                        foodprice = value!;
+                        setState(() {});
+                      },
+                    ),
+                  ),
+                ),
+              ),
+              foodprice == FoodPrice.discount
+                  ? const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 0),
+                      child: TextField(
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          label: Text('Price of Food'),
+                          hintText: 'e.g: 500',
+                        ),
+                      ),
+                    )
+                  : const SizedBox(),
+              const SizedBox(height: 15),
               Container(
                 decoration: BoxDecoration(
                   color: Colors.grey.withOpacity(.2),
@@ -95,7 +152,6 @@ class UploadFoodScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 15),
               // Text('Quantity')
               Container(
                 decoration: BoxDecoration(

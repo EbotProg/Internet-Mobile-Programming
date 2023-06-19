@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:twiceasmuch/auth/user_auth.dart';
 import 'package:twiceasmuch/screens/home_screen.dart';
 import 'package:twiceasmuch/screens/sign_up_screen.dart';
 import 'package:twiceasmuch/utilities/sign_in_utils.dart';
@@ -11,6 +12,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final auth = UserAuthentication();
+  bool isloading = false;
   @override
   void initState() {
     emailSignInController = TextEditingController();
@@ -46,6 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
         height: height - 250,
         child: SingleChildScrollView(
           child: Form(
+            key: signInKey,
             child: Column(children: [
               const SizedBox(height: 30),
               const Text(
@@ -101,10 +105,13 @@ class _LoginScreenState extends State<LoginScreen> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (signInKey.currentState!.validate()) {
                       isLoading = true;
                       setState(() {});
+                      await auth.signInWithEmailAndPassword(
+                          emailSignInController!.text,
+                          passwordSignInController!.text);
                       Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
                           builder: (context) => const HomeScreen(),

@@ -31,6 +31,7 @@ class UserAuthentication {
     if (userId == null) {
       return null;
     }
+    print("success");
     return userId;
   }
 

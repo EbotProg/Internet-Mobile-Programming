@@ -1,0 +1,4 @@
+enum FoodPrice {
+  free,
+  discount;
+}

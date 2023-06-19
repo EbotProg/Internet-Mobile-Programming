@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:twiceasmuch/auth/user_auth.dart';
+import 'package:twiceasmuch/enums/user_status.dart';
+import 'package:twiceasmuch/models/user.dart';
 import 'package:twiceasmuch/screens/home_screen.dart';
 import 'package:twiceasmuch/screens/login_screen.dart';
 import 'package:twiceasmuch/utilities/sign_up_utils.dart';
@@ -11,7 +14,9 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  String dropDownValue = '';
+  var dropDownValue = UserStatus.none;
+  bool isloading = false;
+  final auth = UserAuthentication();
 
   @override
   void initState() {
@@ -22,8 +27,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
     nameSignUpFocus = FocusNode();
     emailSignUpFocus = FocusNode();
-    emailSignUpFocus = FocusNode();
-    emailSignUpFocus = FocusNode();
+    passwordSignUpFocus = FocusNode();
+    confirmPasswordSignUpFocus = FocusNode();
 
     super.initState();
   }
@@ -115,13 +120,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
               const SizedBox(height: 20),
               DropdownButtonFormField(
+                decoration: const InputDecoration(border: OutlineInputBorder()),
                 value: dropDownValue,
+                validator: (val) {
+                  if (val == UserStatus.none) {
+                    return 'Please select status';
+                  }
+                  return null;
+                },
                 items: const [
                   DropdownMenuItem(
-                    value: 'user',
+                    value: UserStatus.none,
+                    child: Text("None"),
+                  ),
+                  DropdownMenuItem(
+                    value: UserStatus.user,
                     child: Text("user"),
                   ),
-                  DropdownMenuItem(value: 'donor', child: Text("donor")),
+                  DropdownMenuItem(
+                      value: UserStatus.donor, child: Text("donor")),
                 ],
                 onChanged: (value) {
                   dropDownValue = value!;
@@ -155,7 +172,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 controller: confirmPasswordSignUpController,
                 focusNode: confirmPasswordSignUpFocus,
                 onFieldSubmitted: (_) {
-                  FocusScope.of(context).requestFocus();
+                  confirmPasswordSignUpFocus!.unfocus();
                 },
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 validator: (input) {
@@ -178,8 +195,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (signUpKey.currentState!.validate()) {
+                      setState(() {
+                        isloading = true;
+                      });
+                      await auth.signUpEmailAndPassword(
+                          AppUser(
+                              email: emailSignUpController!.text,
+                              username: nameSignUpController!.text),
+                          passwordSignUpController!.text);
                       Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
                           builder: (context) => const HomeScreen(),
@@ -193,14 +218,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  child: const Text(
-                    'Register',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                    ),
-                  ),
+                  child: isloading
+                      ? const CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 2.0,
+                        )
+                      : const Text(
+                          'Register',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                          ),
+                        ),
                 ),
               ),
               const SizedBox(height: 20),
