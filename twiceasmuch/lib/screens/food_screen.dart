@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:twiceasmuch/db/payment_db_methods.dart';
 import 'package:twiceasmuch/db/transaction_db_methods.dart';
 import 'package:twiceasmuch/enums/transaction_status.dart';
 import 'package:twiceasmuch/global.dart';
 import 'package:twiceasmuch/models/food.dart';
-import 'package:twiceasmuch/models/payment.dart';
 import 'package:twiceasmuch/models/transaction.dart';
 import 'package:twiceasmuch/screens/payment/make_payments.dart';
 import 'package:twiceasmuch/widgets/message_bottom_sheet_widget.dart';

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:twiceasmuch/db/payment_db_methods.dart';
 import 'package:twiceasmuch/db/transaction_db_methods.dart';
 import 'package:twiceasmuch/enums/payment_status.dart';
 import 'package:twiceasmuch/enums/transaction_status.dart';
@@ -37,7 +36,7 @@ class MakePayment extends StatelessWidget {
                 style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
               ),
               Text(
-                '${food!.discountPrice! + 50}',
+                '${food.discountPrice! + 50}',
                 style:
                     const TextStyle(fontSize: 25, fontWeight: FontWeight.w400),
               )

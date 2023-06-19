@@ -23,11 +23,13 @@ class _TrasactionsScreenState extends State<TrasactionsScreen> {
 
   void getTransaction() async {
     isloading = true;
+    if (!mounted) return;
     setState(() {});
     transactions = await TransactionDBMethods()
         .getTrasactions(Supabase.instance.client.auth.currentUser!.id);
 
     isloading = false;
+    if (!mounted) return;
     setState(() {});
   }
 
@@ -91,7 +93,7 @@ class _TrasactionsScreenState extends State<TrasactionsScreen> {
       // The start action pane is the one at the left or the top side.
       startActionPane: ActionPane(
         // A motion is a widget used to control how the pane animates.
-        motion: DrawerMotion(),
+        motion: const DrawerMotion(),
 
         // A pane can dismiss the Slidable.
         // dismissible: DismissiblePane(onDismissed: () {}),
@@ -121,23 +123,26 @@ class _TrasactionsScreenState extends State<TrasactionsScreen> {
             icon: Icons.message,
             label: 'Message',
           ),
-          SlidableAction(
-            onPressed: (context) async {
-              setState(() {
-                isReceiving = true;
-              });
-              await TransactionDBMethods().updateTransaction(
-                transaction..status = TransactionStatus.delivered,
-              );
-              setState(() {
-                isReceiving = false;
-              });
-            },
-            backgroundColor: const Color(0xFF21B7CA),
-            foregroundColor: Colors.white,
-            icon: isReceiving ? Icons.refresh : Icons.check,
-            label: 'Received',
-          ),
+          if (transaction.status == TransactionStatus.requested)
+            SlidableAction(
+              onPressed: (context) async {
+                if (!mounted) return;
+                setState(() {
+                  isReceiving = true;
+                });
+                await TransactionDBMethods().updateTransaction(
+                  transaction..status = TransactionStatus.delivered,
+                );
+                if (!mounted) return;
+                setState(() {
+                  isReceiving = false;
+                });
+              },
+              backgroundColor: const Color(0xFF21B7CA),
+              foregroundColor: Colors.white,
+              icon: isReceiving ? Icons.refresh : Icons.check,
+              label: 'Received',
+            ),
         ],
       ),
 
@@ -145,25 +150,26 @@ class _TrasactionsScreenState extends State<TrasactionsScreen> {
       endActionPane: ActionPane(
         motion: const DrawerMotion(),
         children: [
-          SlidableAction(
-            onPressed: (context) async {
-              if (!mounted) return;
-              setState(() {
-                isDeleting = true;
-              });
-              await TransactionDBMethods().updateTransaction(
-                transaction..status = TransactionStatus.canceled,
-              );
-              if (!mounted) return;
-              setState(() {
-                isDeleting = false;
-              });
-            },
-            backgroundColor: const Color(0xFFFE4A49), //Color(0xFF21B7CA),
-            foregroundColor: Colors.white,
-            icon: isDeleting ? Icons.refresh : Icons.delete,
-            label: 'Cancel',
-          ),
+          if (transaction.status == TransactionStatus.requested)
+            SlidableAction(
+              onPressed: (context) async {
+                if (!mounted) return;
+                setState(() {
+                  isDeleting = true;
+                });
+                await TransactionDBMethods().updateTransaction(
+                  transaction..status = TransactionStatus.canceled,
+                );
+                if (!mounted) return;
+                setState(() {
+                  isDeleting = false;
+                });
+              },
+              backgroundColor: const Color(0xFFFE4A49), //Color(0xFF21B7CA),
+              foregroundColor: Colors.white,
+              icon: isDeleting ? Icons.refresh : Icons.delete,
+              label: 'Cancel',
+            ),
         ],
       ),
       closeOnScroll: false,

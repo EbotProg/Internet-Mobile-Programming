@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:twiceasmuch/db/food_db_methods.dart';
-import 'package:twiceasmuch/enums/food_state.dart';
 import 'package:twiceasmuch/global.dart';
 import 'package:twiceasmuch/models/food.dart';
 import 'package:twiceasmuch/widgets/food_item.dart';
@@ -29,6 +28,7 @@ class _StarterScreenState extends State<StarterScreen> {
   }
 
   Future<void> init() async {
+    if (!mounted) return;
     setState(() {
       loading = true;
     });
@@ -41,6 +41,7 @@ class _StarterScreenState extends State<StarterScreen> {
 
     final results = await Future.wait(fetches);
 
+    if (!mounted) return;
     setState(() {
       trending = results[0];
       foods = results[2];
@@ -97,11 +98,14 @@ class _StarterScreenState extends State<StarterScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: TextField(
                   controller: searchController,
-                  onChanged: (val) async {
+                  onSubmitted: (val) async {
                     searched = [];
+                    if (!mounted) return;
                     setState(() {});
                     searched = await FoodDBMethods().searchFoods(
-                        value: val.split(' ').first, foodState: FoodState.raw);
+                      value: val,
+                    );
+                    if (!mounted) return;
                     setState(() {});
                   },
                   decoration: const InputDecoration(

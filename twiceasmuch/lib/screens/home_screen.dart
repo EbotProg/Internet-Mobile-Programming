@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:twiceasmuch/db/user_db_methods.dart';
+import 'package:twiceasmuch/enums/user_type.dart';
 import 'package:twiceasmuch/global.dart';
 import 'package:twiceasmuch/screens/account_screen.dart';
 import 'package:twiceasmuch/screens/chats_screen.dart';
@@ -20,19 +21,23 @@ class _HomeScreenState extends State<HomeScreen> {
   int index = 0;
   bool loading = true;
 
-  final screens = [
-    const StarterScreen(),
-    const ListOfUploads(),
-    const ChatsScreen(),
-    const TrasactionsScreen(),
-  ];
+  List<Widget> screens() {
+    return [
+      const StarterScreen(),
+      if (globalUser?.userType == UserType.donor) const ListOfUploads(),
+      const ChatsScreen(),
+      const TrasactionsScreen(),
+    ];
+  }
 
-  final titles = [
-    '2ICEASMUCH',
-    'Inventory',
-    'Chats',
-    'Trasactions',
-  ];
+  List<String> titles() {
+    return [
+      '2ICEASMUCH',
+      if (globalUser?.userType == UserType.donor) 'Inventory',
+      'Chats',
+      'Trasactions',
+    ];
+  }
 
   @override
   void initState() {
@@ -43,6 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void init() async {
     globalUser ??= await UserDBMethods().getCurrenUser();
+    if (!mounted) return;
     setState(() {
       loading = false;
     });
@@ -55,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: const Color(0xff292E2A),
         centerTitle: true,
         title: Text(
-          titles[index],
+          titles()[index],
           style: const TextStyle(
             color: Colors.white,
             fontSize: 20,
@@ -89,6 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 builder: (context) => const AccountScreen(),
               ),
             );
+            if (!mounted) return;
             setState(() {});
           },
           tooltip: 'Account',
@@ -117,7 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ? const Center(
               child: CircularProgressIndicator(),
             )
-          : screens[index],
+          : screens()[index],
       floatingActionButton: index == 1
           ? FloatingActionButton(
               child: const Icon(Icons.upload),
@@ -132,6 +139,7 @@ class _HomeScreenState extends State<HomeScreen> {
           : null,
       bottomNavigationBar: BottomNavigationBar(
         onTap: (index) {
+          if (!mounted) return;
           setState(() {
             this.index = index;
           });
@@ -139,8 +147,8 @@ class _HomeScreenState extends State<HomeScreen> {
         selectedItemColor: const Color(0xff20B970),
         unselectedItemColor: Colors.grey,
         currentIndex: index,
-        items: const [
-          BottomNavigationBarItem(
+        items: [
+          const BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
           ),
@@ -148,15 +156,16 @@ class _HomeScreenState extends State<HomeScreen> {
           //   icon: Icon(Icons.upload),
           //   label: 'Upload',
           // ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.inventory_2_sharp),
-            label: 'Inventory',
-          ),
-          BottomNavigationBarItem(
+          if (globalUser?.userType == UserType.donor)
+            const BottomNavigationBarItem(
+              icon: Icon(Icons.inventory_2_sharp),
+              label: 'Inventory',
+            ),
+          const BottomNavigationBarItem(
             icon: Icon(Icons.chat_bubble),
             label: 'Chats',
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.data_exploration_sharp),
             label: 'Transactions',
           ),

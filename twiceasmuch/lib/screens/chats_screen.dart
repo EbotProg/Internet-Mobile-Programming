@@ -14,8 +14,10 @@ class ChatsScreen extends StatefulWidget {
 class _ChatsScreenState extends State<ChatsScreen> {
   List<Chat> chats = [];
   bool loading = false;
-  void getChats() async {
+  Future<void> getChats() async {
     loading = true;
+    if (!mounted) return;
+    setState(() {});
 
     chats = await ChatDBMethods()
         .getChats(Supabase.instance.client.auth.currentUser!.id);
@@ -46,28 +48,31 @@ class _ChatsScreenState extends State<ChatsScreen> {
               ? const Center(
                   child: Text("No chats yet!"),
                 )
-              : SingleChildScrollView(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 15, vertical: 10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // const Padding(
-                        //   padding: EdgeInsets.symmetric(horizontal: 0),
-                        //   child: Text(
-                        //     'Chats',
-                        //     style: TextStyle(
-                        //       color: Colors.black,
-                        //       fontSize: 30,
-                        //       fontWeight: FontWeight.w700,
-                        //     ),
-                        //   ),
-                        // ),
-                        // const SizedBox(height: 10),
-                        ...List.generate(chats.length,
-                            (index) => ChatItemWidget(chat: chats[index])),
-                      ],
+              : RefreshIndicator(
+                  onRefresh: getChats,
+                  child: SingleChildScrollView(
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // const Padding(
+                          //   padding: EdgeInsets.symmetric(horizontal: 0),
+                          //   child: Text(
+                          //     'Chats',
+                          //     style: TextStyle(
+                          //       color: Colors.black,
+                          //       fontSize: 30,
+                          //       fontWeight: FontWeight.w700,
+                          //     ),
+                          //   ),
+                          // ),
+                          // const SizedBox(height: 10),
+                          ...List.generate(chats.length,
+                              (index) => ChatItemWidget(chat: chats[index])),
+                        ],
+                      ),
                     ),
                   ),
                 ),

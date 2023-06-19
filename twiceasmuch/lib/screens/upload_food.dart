@@ -255,6 +255,7 @@ class _UploadFoodScreenState extends State<UploadFoodScreen> {
                                         onPressed: () async {
                                           image =
                                               await imagePicker.selectPicture();
+                                          if (!mounted) return;
                                           setState(() {});
                                         },
                                         child: const Text("Change Image"))
@@ -357,6 +358,7 @@ class _UploadFoodScreenState extends State<UploadFoodScreen> {
                       ),
                     ],
                     onChanged: (value) {
+                      if (!mounted) return;
                       setState(() {
                         foodState = value!;
                       });

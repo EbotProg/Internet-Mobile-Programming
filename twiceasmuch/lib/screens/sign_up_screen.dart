@@ -95,6 +95,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   }).toList(),
                 ],
                 onChanged: (value) {
+                  if (!mounted) return;
                   setState(() {
                     userType = value;
                   });
@@ -265,6 +266,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ? () {}
                       : () async {
                           if (signUpKey.currentState!.validate()) {
+                            if (!mounted) return;
                             setState(() {
                               registering = true;
                             });
@@ -292,6 +294,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 title: 'Registration error',
                                 context: context,
                               );
+                              if (!mounted) return;
                               setState(() {
                                 registering = false;
                               });

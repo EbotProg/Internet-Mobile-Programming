@@ -76,6 +76,7 @@ class _MyDialogState extends State<MyDialog> {
                   onPressed: loading
                       ? () {}
                       : () async {
+                          if (!mounted) return;
                           setState(() {
                             loading = true;
                           });
