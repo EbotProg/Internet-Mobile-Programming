@@ -41,35 +41,35 @@ class _TrasactionsScreenState extends State<TrasactionsScreen> {
                 color: Colors.green,
               ),
             )
-          : SingleChildScrollView(
-              child: transactions.isEmpty
-                  ? const Center(
-                      child: Text("No Transactions Yet!"),
-                    )
-                  : Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 15, vertical: 20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // const Padding(
-                          //   padding: EdgeInsets.symmetric(horizontal: 0),
-                          //   child: Text(
-                          //     'Transactions',
-                          //     style: TextStyle(
-                          //       color: Colors.black,
-                          //       fontSize: 30,
-                          //       fontWeight: FontWeight.w700,
-                          //     ),
-                          //   ),
-                          // ),
-                          // const SizedBox(height: 10),
-                          ...List.generate(
-                              15, (index) => getItem(transactions[index])),
-                        ],
-                      ),
+          : transactions.isEmpty
+              ? const Center(
+                  child: Text("No Transactions Yet!"),
+                )
+              : SingleChildScrollView(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 15, vertical: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // const Padding(
+                        //   padding: EdgeInsets.symmetric(horizontal: 0),
+                        //   child: Text(
+                        //     'Transactions',
+                        //     style: TextStyle(
+                        //       color: Colors.black,
+                        //       fontSize: 30,
+                        //       fontWeight: FontWeight.w700,
+                        //     ),
+                        //   ),
+                        // ),
+                        // const SizedBox(height: 10),
+                        ...List.generate(
+                            15, (index) => getItem(transactions[index])),
+                      ],
                     ),
-            ),
+                  ),
+                ),
     );
   }
 
