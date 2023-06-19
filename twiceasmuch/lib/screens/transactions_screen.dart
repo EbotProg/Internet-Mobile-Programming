@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:twiceasmuch/db/food_db_methods.dart';
 import 'package:twiceasmuch/db/transaction_db_methods.dart';
 import 'package:twiceasmuch/enums/transaction_status.dart';
 import 'package:twiceasmuch/global.dart';
@@ -133,6 +134,8 @@ class _TrasactionsScreenState extends State<TrasactionsScreen> {
                 await TransactionDBMethods().updateTransaction(
                   transaction..status = TransactionStatus.delivered,
                 );
+                transaction.food!.sold = true;
+                await FoodDBMethods().editFood(transaction.food!);
                 if (!mounted) return;
                 setState(() {
                   isReceiving = false;
