@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:intl/intl.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:twiceasmuch/db/transaction_db_methods.dart';
+import 'package:twiceasmuch/enums/transaction_status.dart';
+import 'package:twiceasmuch/global.dart';
 import 'package:twiceasmuch/models/transaction.dart';
+import 'package:twiceasmuch/widgets/message_bottom_sheet_widget.dart';
+
 
 class TrasactionsScreen extends StatefulWidget {
   const TrasactionsScreen({super.key});
@@ -25,8 +31,8 @@ class _TrasactionsScreenState extends State<TrasactionsScreen> {
 
   @override
   void initState() {
-    getTransaction();
     super.initState();
+    getTransaction();
   }
 
   @override
@@ -65,7 +71,9 @@ class _TrasactionsScreenState extends State<TrasactionsScreen> {
                         // ),
                         // const SizedBox(height: 10),
                         ...List.generate(
-                            15, (index) => getItem(transactions[index])),
+                          transactions.length,
+                          (index) => getItem(transactions[index]),
+                        ),
                       ],
                     ),
                   ),
@@ -74,47 +82,151 @@ class _TrasactionsScreenState extends State<TrasactionsScreen> {
   }
 
   Widget getItem(Transaction transaction) {
-    return Container(
-      decoration: BoxDecoration(
-        color: const Color(0xffF0F0F0),
-        border: Border(
-          right: BorderSide(
-            color: Colors.yellow[800]!, // Color(0xff20B970),
-            width: 2,
-          ),
-        ),
-        // borderRadius: BorderRadius.circular(10),
-      ),
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-      margin: const EdgeInsets.symmetric(vertical: 10),
-      child: Row(
+    return Slidable(
+      // Specify a key if the Slidable is dismissible.
+      key: ValueKey(transaction.transactionID),
+
+      // The start action pane is the one at the left or the top side.
+      startActionPane: ActionPane(
+        // A motion is a widget used to control how the pane animates.
+        motion: const ScrollMotion(),
+
+        // A pane can dismiss the Slidable.
+        dismissible: DismissiblePane(onDismissed: () {}),
+
+        // All actions are defined in the children parameter.
         children: [
-          Icon(
-            Icons.info,
-            color: Colors.yellow[800],
-            size: 30,
+          // A SlidableAction can have an icon and/or a label.
+          SlidableAction(
+            onPressed: (context) {},
+            backgroundColor: Colors.blue,
+            foregroundColor: Colors.white,
+            icon: Icons.message,
+            label: 'Message',
           ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      transaction.buyer!.username!,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    Text(transaction.time.toString()),
-                  ],
-                ),
-                const SizedBox(height: 5),
-                Text(transaction.food!.name!),
-              ],
-            ),
+          SlidableAction(
+            onPressed: (context) {},
+            backgroundColor: const Color(0xFFFE4A49), //Color(0xFF21B7CA),
+            foregroundColor: Colors.white,
+            icon: Icons.delete,
+            label: 'Cancel',
           ),
         ],
+      ),
+
+      // The end action pane is the one at the right or the bottom side.
+      endActionPane: ActionPane(
+        motion: const ScrollMotion(),
+        children: [
+          SlidableAction(
+            onPressed: (context) async {
+              await showModalBottomSheet(
+                  isDismissible: true,
+                  context: context,
+                  builder: (context) {
+                    return MessageBottomSheetWidget(
+                      user: globalUser?.userID == transaction.buyerID
+                          ? transaction.donor!
+                          : transaction.buyer!,
+                      food: transaction.food!,
+                    );
+                  });
+
+              setState(() {});
+            },
+            backgroundColor: Colors.blue,
+            foregroundColor: Colors.white,
+            icon: Icons.message,
+            label: 'Message',
+          ),
+          SlidableAction(
+            onPressed: (context) async {
+              await TransactionDBMethods().updateTransaction(
+                transaction..status = TransactionStatus.delivered,
+              );
+              setState(() {});
+            },
+            backgroundColor: const Color(0xFF21B7CA),
+            foregroundColor: Colors.white,
+            icon: Icons.check,
+            label: 'Received',
+          ),
+          SlidableAction(
+            onPressed: (context) async {
+              await TransactionDBMethods().updateTransaction(
+                transaction..status = TransactionStatus.canceled,
+              );
+              setState(() {});
+            },
+            backgroundColor: const Color(0xFFFE4A49), //Color(0xFF21B7CA),
+            foregroundColor: Colors.white,
+            icon: Icons.delete,
+            label: 'Cancel',
+          ),
+        ],
+      ),
+
+      // The child of the Slidable is what the user sees when the
+      // component is not dragged.
+      child: Container(
+        decoration: BoxDecoration(
+          color: const Color(0xffF0F0F0),
+          border: Border(
+            right: BorderSide(
+              color: Colors.yellow[800]!, // Color(0xff20B970),
+              width: 2,
+            ),
+          ),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+        margin: const EdgeInsets.symmetric(vertical: 10),
+        child: Row(
+          children: [
+            if (transaction.status == TransactionStatus.requested)
+              Icon(
+                Icons.info,
+                color: Colors.yellow[800],
+                size: 30,
+              )
+            else if (transaction.status == TransactionStatus.delivered)
+              Icon(
+                Icons.check,
+                color: Colors.green[800],
+                size: 30,
+              )
+            else
+              Icon(
+                Icons.close,
+                color: Colors.red[800],
+                size: 30,
+              ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        globalUser?.userID == transaction.buyer!.userID
+                            ? transaction.donor!.username!
+                            : transaction.buyer!.username!,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        DateFormat.Md()
+                            .format(transaction.time ?? DateTime.now()),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 5),
+                  Text(transaction.food!.name!),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:twiceasmuch/models/food.dart';
 import 'package:twiceasmuch/screens/payment/make_payments.dart';
+import 'package:twiceasmuch/widgets/message_bottom_sheet_widget.dart';
 
 class FoodScreen extends StatelessWidget {
   final Food food;
@@ -131,7 +132,7 @@ class FoodScreen extends StatelessWidget {
                                                             MaterialPageRoute(
                                                                 builder:
                                                                     (context) =>
-                                                                        MakePayment()));
+                                                                        const MakePayment()));
                                                       },
                                                       icon: Container(
                                                         height: 50,
@@ -165,7 +166,7 @@ class FoodScreen extends StatelessWidget {
                                                             MaterialPageRoute(
                                                                 builder:
                                                                     (context) =>
-                                                                        MakePayment()));
+                                                                        const MakePayment()));
                                                       },
                                                       icon: Container(
                                                         height: 50,
@@ -212,16 +213,27 @@ class FoodScreen extends StatelessWidget {
                         ),
                       ),
                       IconButton(
-                          onPressed: () {},
-                          icon: Row(
-                            children: [
-                              const Icon(Icons.message_outlined),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              Text("Message ${food.donor?.username ?? ''}")
-                            ],
-                          ))
+                        onPressed: () async {
+                          await showModalBottomSheet(
+                              isDismissible: true,
+                              context: context,
+                              builder: (context) {
+                                return MessageBottomSheetWidget(
+                                  user: food.donor!,
+                                  food: food,
+                                );
+                              });
+                        },
+                        icon: Row(
+                          children: [
+                            const Icon(Icons.message_outlined),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Text("Message ${food.donor?.username ?? ''}")
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),

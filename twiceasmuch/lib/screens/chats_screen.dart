@@ -64,8 +64,8 @@ class _ChatsScreenState extends State<ChatsScreen> {
                         //   ),
                         // ),
                         // const SizedBox(height: 10),
-                        ...List.generate(
-                            10, (index) => ChatItemWidget(chat: chats[index])),
+                        ...List.generate(chats.length,
+                            (index) => ChatItemWidget(chat: chats[index])),
                       ],
                     ),
                   ),

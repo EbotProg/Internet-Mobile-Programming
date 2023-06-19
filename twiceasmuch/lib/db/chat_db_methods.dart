@@ -77,23 +77,33 @@ class ChatDBMethods {
     }
   }
 
-  Stream<List<Message>> subscribeChat({
+  Future<List<Message>> getMessages({
     required String myId,
     required String senderId,
-  }) {
-    return supabaseInstance.client
+  }) async {
+    final messagesMAp =await supabaseInstance.client
         .from('messages')
         .select<List<Map<String, dynamic>>>()
-        .in_('senderid', [senderId, myId])
-        .in_('receiverid', [myId, senderId])
-        .order('timesent')
-        .asStream()
+        .in_('senderid', [senderId, myId]).in_(
+            'receiverid', [myId, senderId]).order('timesent');
+
+    return messagesMAp
         .map(
-          (event) => event
-              .map(
-                (e) => Message.fromJson(e),
-              )
-              .toList(),
-        );
+          (e) => Message.fromJson(e),
+        )
+        .toList()
+      ..sort(
+        (a, b) => a.timeSent?.compareTo(b.timeSent ?? DateTime.now()) ?? 0,
+      );
+  }
+
+  void markMessageAsRead(
+    Message message,
+  ) async {
+    message.isRead = true;
+    await supabaseInstance.client
+        .from('messages')
+        .update(message.toJson())
+        .eq('messageid', message.messageID);
   }
 }

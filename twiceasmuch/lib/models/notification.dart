@@ -22,7 +22,7 @@ class Notification {
 
   Map<String, dynamic> toJson() {
     return {
-      'notificationid': notificationID,
+      // 'notificationid': notificationID,
       'content': content,
       'foodid': foodID,
       'userid': userID,

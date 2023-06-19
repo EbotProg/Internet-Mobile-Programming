@@ -7,7 +7,7 @@ import 'package:twiceasmuch/screens/list_of_uploads/uploaded_food.dart';
 import 'package:twiceasmuch/screens/upload_food.dart';
 
 class ListOfUploads extends StatefulWidget {
-  ListOfUploads({super.key});
+  const ListOfUploads({super.key});
 
   @override
   State<ListOfUploads> createState() => _ListOfUploadsState();

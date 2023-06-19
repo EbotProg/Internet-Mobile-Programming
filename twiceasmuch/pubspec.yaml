@@ -38,6 +38,7 @@ dependencies:
   intl: ^0.18.1
   supabase_flutter: ^1.6.2
   image_picker: ^0.8.8
+  flutter_slidable: ^3.0.0
 
 dev_dependencies:
   flutter_test:

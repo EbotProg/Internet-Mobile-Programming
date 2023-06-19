@@ -362,7 +362,7 @@ class _UploadFoodScreenState extends State<UploadFoodScreen> {
                   height: 10,
                 ),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 0),
+                  padding: const EdgeInsets.symmetric(horizontal: 0),
                   child: TextFormField(
                     controller: quantityController,
                     validator: (val) {
@@ -407,7 +407,7 @@ class _UploadFoodScreenState extends State<UploadFoodScreen> {
                   height: 10,
                 ),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 0),
+                  padding: const EdgeInsets.symmetric(horizontal: 0),
                   child: TextFormField(
                     controller: dateController,
                     validator: (val) {
@@ -417,8 +417,8 @@ class _UploadFoodScreenState extends State<UploadFoodScreen> {
                       return null;
                     },
                     decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      label: Text('Expiry Date'),
+                      border: const OutlineInputBorder(),
+                      label: const Text('Expiry Date'),
                       hintText: '14/07/2024',
                       suffixIcon: IconButton(
                           onPressed: () {
@@ -449,7 +449,7 @@ class _UploadFoodScreenState extends State<UploadFoodScreen> {
                                 : int.tryParse(priceController!.text));
                         food.imageFile = image;
                         setState(() {});
-                        var res;
+                        String? res;
                         if (widget.shouldEdit) {
                           res = await db.uploadFood(food);
                         } else {

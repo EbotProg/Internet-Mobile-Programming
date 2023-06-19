@@ -32,7 +32,7 @@ class Transaction {
 
   Map<String, dynamic> toJson() {
     return {
-      'transactionid': transactionID,
+      // 'transactionid': transactionID,
       'foodid': foodID,
       'discountedprice': discountedPrice,
       'time': DateFormat('yyyy-MM-dd HH:mm:ss').format(

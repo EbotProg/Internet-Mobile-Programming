@@ -3,17 +3,18 @@ import 'package:twiceasmuch/models/food.dart';
 import 'package:twiceasmuch/models/user.dart';
 
 class Message {
-  final int? messageID;
-  final String? senderID;
-  final String? receiverID;
-  final String? content;
-  final DateTime? timeSent;
-  final int? foodID;
-  final bool? isRead;
+  int? messageID;
+  String? senderID;
+  String? receiverID;
+  String? content;
+  DateTime? timeSent;
+  int? foodID;
+  bool? isRead;
 
   AppUser? sender;
   AppUser? receiver;
   Food? food;
+  bool local;
 
   Message({
     this.messageID,
@@ -23,6 +24,7 @@ class Message {
     this.content,
     this.timeSent,
     this.isRead,
+    this.local = false,
   });
 
   factory Message.fromJson(Map<String, dynamic> json) {
@@ -41,7 +43,7 @@ class Message {
 
   Map<String, dynamic> toJson() {
     return {
-      "messageid": messageID,
+      // "messageid": messageID,
       "senderid": senderID,
       "foodid": foodID,
       "receiverid": receiverID,
