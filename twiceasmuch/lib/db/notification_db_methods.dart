@@ -3,7 +3,9 @@ import 'dart:async';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:twiceasmuch/db/food_db_methods.dart';
 import 'package:twiceasmuch/db/user_db_methods.dart';
+import 'package:twiceasmuch/models/food.dart';
 import 'package:twiceasmuch/models/notification.dart';
+import 'package:twiceasmuch/models/user.dart';
 
 class NotificationDBMethods {
   final supabaseInstance = Supabase.instance;
@@ -16,8 +18,15 @@ class NotificationDBMethods {
           .eq('userid', userId)
           .order('timesent');
 
-      final users = await UserDBMethods().getUsers();
-      final foods = await FoodDBMethods().getFoods();
+      final fetches = [
+        UserDBMethods().getUsers(),
+        FoodDBMethods().getFoods(),
+      ];
+
+      final results = await Future.wait(fetches);
+
+      final users = results[0] as List<AppUser>;
+      final foods = results[1] as List<Food>;
 
       final notifications =
           notificationsMap.map((e) => Notification.fromJson(e)).toList();

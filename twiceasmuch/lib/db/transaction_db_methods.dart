@@ -5,8 +5,11 @@ import 'package:twiceasmuch/db/food_db_methods.dart';
 import 'package:twiceasmuch/db/notification_db_methods.dart';
 import 'package:twiceasmuch/db/payment_db_methods.dart';
 import 'package:twiceasmuch/db/user_db_methods.dart';
+import 'package:twiceasmuch/models/food.dart';
 import 'package:twiceasmuch/models/notification.dart';
+import 'package:twiceasmuch/models/payment.dart';
 import 'package:twiceasmuch/models/transaction.dart';
+import 'package:twiceasmuch/models/user.dart';
 
 class TransactionDBMethods {
   final supabaseInstance = Supabase.instance;
@@ -24,9 +27,17 @@ class TransactionDBMethods {
           .eq('donorid', userId)
           .order('time');
 
-      final users = await UserDBMethods().getUsers();
-      final foods = await FoodDBMethods().getFoods();
-      final payments = await PaymentDBMethods().getPayments(userId);
+      final fetches = [
+        UserDBMethods().getUsers(),
+        FoodDBMethods().getFoods(),
+        PaymentDBMethods().getPayments(userId),
+      ];
+
+      final results = await Future.wait(fetches);
+
+      final users = results[0] as List<AppUser>;
+      final foods = results[1] as List<Food>;
+      final payments = results[2] as List<Payment>;
 
       final transactions1 =
           trasactionsMap1.map((e) => Transaction.fromJson(e)).toList();

@@ -1,10 +1,13 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:twiceasmuch/db/food_db_methods.dart';
 import 'package:twiceasmuch/db/user_db_methods.dart';
 import 'package:twiceasmuch/models/chat.dart';
+import 'package:twiceasmuch/models/food.dart';
 import 'package:twiceasmuch/models/message.dart';
+import 'package:twiceasmuch/models/user.dart';
 
 class ChatDBMethods {
   final supabaseInstance = Supabase.instance;
@@ -22,8 +25,15 @@ class ChatDBMethods {
           .eq('receiverid', userId)
           .order('timesent');
 
-      final users = await UserDBMethods().getUsers();
-      final foods = await FoodDBMethods().getFoods();
+      final fetches = [
+        UserDBMethods().getUsers(),
+        FoodDBMethods().getFoods(),
+      ];
+
+      final results = await Future.wait(fetches);
+
+      final users = results[0] as List<AppUser>;
+      final foods = results[1] as List<Food>;
 
       final messages1 = messagesMap1.map((e) => Message.fromJson(e)).toList();
       final messages2 = messagesMap2.map((e) => Message.fromJson(e)).toList();
@@ -54,6 +64,12 @@ class ChatDBMethods {
           );
         }
       }
+      chats.sort(
+        (a, b) =>
+            b.messages.last.timeSent
+                ?.compareTo(a.messages.last.timeSent ?? DateTime.now()) ??
+            0,
+      );
 
       return chats;
     } on PostgrestException catch (e) {

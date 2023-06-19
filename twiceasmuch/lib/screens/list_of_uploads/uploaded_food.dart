@@ -105,7 +105,7 @@ class UploadedFood extends StatelessWidget {
                   food!.sold
                       ? const Text(
                           'Sold',
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(color: Colors.green),
                         )
                       : const Text(
                           'Not sold',
