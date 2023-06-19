@@ -18,6 +18,9 @@ class TrasactionsScreen extends StatefulWidget {
 class _TrasactionsScreenState extends State<TrasactionsScreen> {
   List<Transaction> transactions = [];
   bool isloading = false;
+  bool isDeleting = false;
+  bool isReceiving = false;
+
   void getTransaction() async {
     isloading = true;
     setState(() {});
@@ -88,35 +91,15 @@ class _TrasactionsScreenState extends State<TrasactionsScreen> {
       // The start action pane is the one at the left or the top side.
       startActionPane: ActionPane(
         // A motion is a widget used to control how the pane animates.
-        motion: const ScrollMotion(),
+        motion: DrawerMotion(),
 
         // A pane can dismiss the Slidable.
-        dismissible: DismissiblePane(onDismissed: () {}),
+        // dismissible: DismissiblePane(onDismissed: () {}),
+        dragDismissible: false,
 
         // All actions are defined in the children parameter.
         children: [
           // A SlidableAction can have an icon and/or a label.
-          SlidableAction(
-            onPressed: (context) {},
-            backgroundColor: Colors.blue,
-            foregroundColor: Colors.white,
-            icon: Icons.message,
-            label: 'Message',
-          ),
-          SlidableAction(
-            onPressed: (context) {},
-            backgroundColor: const Color(0xFFFE4A49), //Color(0xFF21B7CA),
-            foregroundColor: Colors.white,
-            icon: Icons.delete,
-            label: 'Cancel',
-          ),
-        ],
-      ),
-
-      // The end action pane is the one at the right or the bottom side.
-      endActionPane: ActionPane(
-        motion: const ScrollMotion(),
-        children: [
           SlidableAction(
             onPressed: (context) async {
               await showModalBottomSheet(
@@ -140,30 +123,50 @@ class _TrasactionsScreenState extends State<TrasactionsScreen> {
           ),
           SlidableAction(
             onPressed: (context) async {
+              setState(() {
+                isReceiving = true;
+              });
               await TransactionDBMethods().updateTransaction(
                 transaction..status = TransactionStatus.delivered,
               );
-              setState(() {});
+              setState(() {
+                isReceiving = false;
+              });
             },
             backgroundColor: const Color(0xFF21B7CA),
             foregroundColor: Colors.white,
-            icon: Icons.check,
+            icon: isReceiving ? Icons.refresh : Icons.check,
             label: 'Received',
           ),
+        ],
+      ),
+
+      // The end action pane is the one at the right or the bottom side.
+      endActionPane: ActionPane(
+        motion: const DrawerMotion(),
+        children: [
           SlidableAction(
             onPressed: (context) async {
+              if (!mounted) return;
+              setState(() {
+                isDeleting = true;
+              });
               await TransactionDBMethods().updateTransaction(
                 transaction..status = TransactionStatus.canceled,
               );
-              setState(() {});
+              if (!mounted) return;
+              setState(() {
+                isDeleting = false;
+              });
             },
             backgroundColor: const Color(0xFFFE4A49), //Color(0xFF21B7CA),
             foregroundColor: Colors.white,
-            icon: Icons.delete,
+            icon: isDeleting ? Icons.refresh : Icons.delete,
             label: 'Cancel',
           ),
         ],
       ),
+      closeOnScroll: false,
 
       // The child of the Slidable is what the user sees when the
       // component is not dragged.
@@ -172,7 +175,11 @@ class _TrasactionsScreenState extends State<TrasactionsScreen> {
           color: const Color(0xffF0F0F0),
           border: Border(
             right: BorderSide(
-              color: Colors.yellow[800]!, // Color(0xff20B970),
+              color: transaction.status == TransactionStatus.requested
+                  ? Colors.yellow[800]!
+                  : transaction.status == TransactionStatus.delivered
+                      ? Colors.green[800]!
+                      : Colors.red[800]!, // Color(0xff20B970),
               width: 2,
             ),
           ),

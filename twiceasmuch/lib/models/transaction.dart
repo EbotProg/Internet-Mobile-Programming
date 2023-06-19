@@ -14,6 +14,10 @@ class Transaction {
     this.donorID,
     this.paymentID,
     this.status,
+    this.buyer,
+    this.donor,
+    this.food,
+    this.payment,
   });
 
   int? transactionID;

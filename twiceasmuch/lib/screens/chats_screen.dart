@@ -20,6 +20,7 @@ class _ChatsScreenState extends State<ChatsScreen> {
     chats = await ChatDBMethods()
         .getChats(Supabase.instance.client.auth.currentUser!.id);
     loading = false;
+    if (!mounted) return;
     setState(() {});
   }
 

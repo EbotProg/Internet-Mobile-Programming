@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:twiceasmuch/db/payment_db_methods.dart';
+import 'package:twiceasmuch/db/transaction_db_methods.dart';
+import 'package:twiceasmuch/enums/transaction_status.dart';
+import 'package:twiceasmuch/global.dart';
 import 'package:twiceasmuch/models/food.dart';
 import 'package:twiceasmuch/models/payment.dart';
+import 'package:twiceasmuch/models/transaction.dart';
 import 'package:twiceasmuch/screens/payment/make_payments.dart';
 import 'package:twiceasmuch/widgets/message_bottom_sheet_widget.dart';
 import 'package:twiceasmuch/utilities/snackbar_utils.dart';
@@ -106,16 +110,23 @@ class FoodScreen extends StatelessWidget {
                             onPressed: () async {
                               if (food.discountPrice == 0 ||
                                   food.discountPrice == null) {
-                                await PaymentDBMethods().createPayment(Payment(
-                                    amount: 0,
-                                    depositorID: Supabase
-                                        .instance.client.auth.currentUser!.id,
-                                    timeOfDeposit: DateTime.now(),
-                                    withdrawerID: food.donorID));
+                                await TransactionDBMethods().createTrasaction(
+                                  Transaction(
+                                    buyerID: globalUser?.userID,
+                                    donorID: food.donorID,
+                                    foodID: food.foodID,
+                                    status: TransactionStatus.requested,
+                                    time: DateTime.now(),
+                                    food: food,
+                                    donor: food.donor,
+                                    buyer: globalUser,
+                                  ),
+                                );
                                 snackbarSuccessful(
-                                    title:
-                                        "A notification has been sent to the donor",
-                                    context: context);
+                                  title:
+                                      "A notification has been sent to the donor",
+                                  context: context,
+                                );
                                 Navigator.of(context).pop();
                               } else {
                                 showModalBottomSheet(
@@ -182,12 +193,16 @@ class FoodScreen extends StatelessWidget {
                                                     children: [
                                                       IconButton(
                                                         onPressed: () {
-                                                          Navigator.of(context).push(
-                                                              MaterialPageRoute(
-                                                                  builder: (context) =>
+                                                          Navigator.of(context)
+                                                              .push(
+                                                            MaterialPageRoute(
+                                                              builder:
+                                                                  (context) =>
                                                                       MakePayment(
-                                                                          food:
-                                                                              food)));
+                                                                food: food,
+                                                              ),
+                                                            ),
+                                                          );
                                                         },
                                                         icon: Container(
                                                           height: 50,

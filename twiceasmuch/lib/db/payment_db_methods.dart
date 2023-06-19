@@ -64,15 +64,21 @@ class PaymentDBMethods {
     }
   }
 
-  Future<void> createPayment(Payment payment) async {
+  Future<Payment?> createPayment(Payment payment) async {
     try {
-      await supabaseInstance.client.from('payment').insert(payment.toJson());
+      final result = await supabaseInstance.client
+          .from('payment')
+          .insert(payment.toJson())
+          .maybeSingle()
+          .select<Map<String, dynamic>?>();
+      if (result == null) return null;
+      return Payment.fromJson(result);
     } on PostgrestException catch (e) {
       print(e);
-      return;
+      return null;
     } catch (e) {
       print(e);
-      return;
+      return null;
     }
   }
 }

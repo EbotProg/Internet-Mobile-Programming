@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:twiceasmuch/db/food_db_methods.dart';
+import 'package:twiceasmuch/db/notification_db_methods.dart';
 import 'package:twiceasmuch/db/payment_db_methods.dart';
 import 'package:twiceasmuch/db/user_db_methods.dart';
+import 'package:twiceasmuch/models/notification.dart';
 import 'package:twiceasmuch/models/transaction.dart';
 
 class TransactionDBMethods {
@@ -81,9 +83,25 @@ class TransactionDBMethods {
 
   Future<void> createTrasaction(Transaction transaction) async {
     try {
+      if (transaction.payment != null && transaction.paymentID == null) {
+        transaction.payment = await PaymentDBMethods().createPayment(
+          transaction.payment!,
+        );
+        transaction.paymentID = transaction.payment?.paymentID;
+      }
       await supabaseInstance.client
           .from('transactions')
           .insert(transaction.toJson());
+      await NotificationDBMethods().createNotification(
+        Notification(
+          content: (transaction.buyer?.username ?? '') +
+              ' has requested to get ' +
+              (transaction.food?.name ?? ''),
+          foodID: transaction.foodID,
+          timeSent: transaction.time,
+          userID: transaction.donorID,
+        ),
+      );
     } on PostgrestException catch (e) {
       print(e);
       return;

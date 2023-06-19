@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:twiceasmuch/db/payment_db_methods.dart';
+import 'package:twiceasmuch/db/transaction_db_methods.dart';
+import 'package:twiceasmuch/enums/payment_status.dart';
+import 'package:twiceasmuch/enums/transaction_status.dart';
+import 'package:twiceasmuch/global.dart';
 import 'package:twiceasmuch/models/food.dart';
 import 'package:twiceasmuch/models/payment.dart';
+import 'package:twiceasmuch/models/transaction.dart';
 import 'package:twiceasmuch/screens/home_screen.dart';
 
 class MakePayment extends StatelessWidget {
-  const MakePayment({super.key, this.food});
-  final Food? food;
+  const MakePayment({super.key, required this.food});
+  final Food food;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -76,11 +81,26 @@ class MakePayment extends StatelessWidget {
           child: OutlinedButton(
             onPressed: () async {
               //make payment
-              await PaymentDBMethods().createPayment(Payment(
-                  amount: food!.discountPrice! + 50,
-                  depositorID: Supabase.instance.client.auth.currentUser!.id,
-                  timeOfDeposit: DateTime.now(),
-                  withdrawerID: food!.donorID));
+
+              await TransactionDBMethods().createTrasaction(
+                Transaction(
+                  buyerID: globalUser?.userID,
+                  donorID: food.donorID,
+                  foodID: food.foodID,
+                  status: TransactionStatus.requested,
+                  time: DateTime.now(),
+                  food: food,
+                  donor: food.donor,
+                  buyer: globalUser,
+                  payment: Payment(
+                    amount: food.discountPrice! + 50,
+                    depositorID: Supabase.instance.client.auth.currentUser!.id,
+                    timeOfDeposit: DateTime.now(),
+                    withdrawerID: food.donorID,
+                    status: PaymentStatus.deposited,
+                  ),
+                ),
+              );
               showModalBottomSheet(
                   shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.vertical(

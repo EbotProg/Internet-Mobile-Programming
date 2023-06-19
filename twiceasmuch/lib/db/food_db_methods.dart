@@ -144,7 +144,7 @@ class FoodDBMethods {
       final foodMap = await supabaseInstance.client
           .from('food')
           .select<List<Map<String, dynamic>>>()
-          .contains('foodid', id)
+          .eq('foodid', id)
           .single() as Map<String, dynamic>;
 
       final food = Food.fromJson(foodMap);

@@ -114,13 +114,13 @@ void _snackbar({
       side: BorderSide(color: darkColor, width: 2),
       borderRadius: BorderRadius.circular(10),
     ),
-    action: SnackBarAction(
-      label: 'Got it!',
-      onPressed: () {
-        ScaffoldMessenger.of(context).hideCurrentSnackBar();
-      },
-      textColor: Colors.white,
-    ),
+    // action: SnackBarAction(
+    //   label: 'Got it!',
+    //   onPressed: () {
+    //     ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    //   },
+    //   textColor: Colors.white,
+    // ),
     dismissDirection: DismissDirection.down,
     // animation: Animation,
   );

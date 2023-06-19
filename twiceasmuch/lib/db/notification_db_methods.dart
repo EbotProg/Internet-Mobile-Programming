@@ -13,7 +13,7 @@ class NotificationDBMethods {
       final notificationsMap = await supabaseInstance.client
           .from('notifications')
           .select<List<Map<String, dynamic>>>()
-          .contains('userid', userId)
+          .eq('userid', userId)
           .order('timesent');
 
       final users = await UserDBMethods().getUsers();
