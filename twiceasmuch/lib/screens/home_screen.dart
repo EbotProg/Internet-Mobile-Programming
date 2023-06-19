@@ -30,12 +30,14 @@ class _HomeScreenState extends State<HomeScreen> {
     ];
   }
 
-  final titles = [
-    '2ICEASMUCH',
-    'Inventory',
-    'Chats',
-    'Trasactions',
-  ];
+  List<String> titles() {
+    return [
+      '2ICEASMUCH',
+      if (globalUser?.userType == UserType.donor) 'Inventory',
+      'Chats',
+      'Trasactions',
+    ];
+  }
 
   @override
   void initState() {
@@ -46,6 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void init() async {
     globalUser ??= await UserDBMethods().getCurrenUser();
+    if (!mounted) return;
     setState(() {
       loading = false;
     });
@@ -58,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: const Color(0xff292E2A),
         centerTitle: true,
         title: Text(
-          titles[index],
+          titles()[index],
           style: const TextStyle(
             color: Colors.white,
             fontSize: 20,
@@ -92,6 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 builder: (context) => const AccountScreen(),
               ),
             );
+            if (!mounted) return;
             setState(() {});
           },
           tooltip: 'Account',
@@ -135,6 +139,7 @@ class _HomeScreenState extends State<HomeScreen> {
           : null,
       bottomNavigationBar: BottomNavigationBar(
         onTap: (index) {
+          if (!mounted) return;
           setState(() {
             this.index = index;
           });

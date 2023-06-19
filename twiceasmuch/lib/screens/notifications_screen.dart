@@ -17,10 +17,12 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
   void getNotification() async {
     isloading = true;
+    if (!mounted) return;
     setState(() {});
     notifications = await NotificationDBMethods()
         .getNotifications(Supabase.instance.client.auth.currentUser!.id);
     isloading = false;
+    if (!mounted) return;
     setState(() {});
   }
 

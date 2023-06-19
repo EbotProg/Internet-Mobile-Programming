@@ -110,6 +110,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ? () {}
                       : () async {
                           if (signInKey.currentState!.validate()) {
+                            if (!mounted) return;
                             setState(() {
                               isLoading = true;
                             });
@@ -124,6 +125,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 title: 'Incorrect credentials',
                                 context: context,
                               );
+                              if (!mounted) return;
                               setState(() {
                                 isLoading = false;
                               });

@@ -21,6 +21,7 @@ class _ListOfUploadsState extends State<ListOfUploads> {
   Future<void> getUploads() async {
     foods = await db
         .getUploadedFoods(Supabase.instance.client.auth.currentUser!.id);
+    if (!mounted) return;
     setState(() {});
   }
 

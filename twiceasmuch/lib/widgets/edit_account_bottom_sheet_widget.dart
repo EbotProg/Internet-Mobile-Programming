@@ -97,6 +97,7 @@ class _EditAccountBottomSheetWidgetState
                 }).toList(),
               ],
               onChanged: (value) {
+                if (!mounted) return;
                 setState(() {
                   userType = value;
                 });
@@ -270,6 +271,7 @@ class _EditAccountBottomSheetWidgetState
                     ? () {}
                     : () async {
                         if (signUpKey.currentState!.validate()) {
+                          if (!mounted) return;
                           setState(() {
                             editing = true;
                           });

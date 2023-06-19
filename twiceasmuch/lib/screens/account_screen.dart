@@ -55,12 +55,14 @@ class _AccountScreenState extends State<AccountScreen> {
                   if (globalUser!.picture != null)
                     GestureDetector(
                       onTap: () async {
+                        if (!mounted) return;
                         setState(() {
                           isRemovingPicture = true;
                         });
                         await UserDBMethods().updateUser(
                           globalUser!..picture = null,
                         );
+                        if (!mounted) return;
                         setState(() {
                           isRemovingPicture = false;
                         });
@@ -119,11 +121,13 @@ class _AccountScreenState extends State<AccountScreen> {
 
                                               if (globalUser?.imageFile !=
                                                   null) {
+                                                if (!mounted) return;
                                                 setState(() {
                                                   isUploadingImage = true;
                                                 });
                                                 await UserDBMethods()
                                                     .updateUser(globalUser!);
+                                                if (!mounted) return;
                                                 setState(() {
                                                   isUploadingImage = false;
                                                 });
@@ -154,11 +158,13 @@ class _AccountScreenState extends State<AccountScreen> {
                                                       .pickImageFromGallery();
                                               if (globalUser?.imageFile !=
                                                   null) {
+                                                if (!mounted) return;
                                                 setState(() {
                                                   isUploadingImage = true;
                                                 });
                                                 await UserDBMethods()
                                                     .updateUser(globalUser!);
+                                                if (!mounted) return;
                                                 setState(() {
                                                   isUploadingImage = false;
                                                 });
@@ -226,6 +232,7 @@ class _AccountScreenState extends State<AccountScreen> {
                             return const EditAccountBottomSheetWidget();
                           });
 
+                      if (!mounted) return;
                       setState(() {});
                     },
                     child: const SizedBox(

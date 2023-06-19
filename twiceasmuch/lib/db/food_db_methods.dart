@@ -109,14 +109,12 @@ class FoodDBMethods {
 
   Future<List<Food>> searchFoods({
     required String value,
-    required FoodState foodState,
   }) async {
     try {
       final foodMaps = await supabaseInstance.client
           .from('food')
           .select<List<Map<String, dynamic>>>()
           .textSearch('name', value)
-          .eq('state', foodState.toString())
           .order('uploadedAt');
 
       final users = await UserDBMethods().getUsers();

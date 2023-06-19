@@ -90,6 +90,7 @@ class _MessageBottomSheetWidgetState extends State<MessageBottomSheetWidget> {
                     ? () {}
                     : () async {
                         if (signUpKey.currentState!.validate()) {
+                          if (!mounted) return;
                           setState(() {
                             sending = true;
                           });

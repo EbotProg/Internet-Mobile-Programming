@@ -23,11 +23,13 @@ class _TrasactionsScreenState extends State<TrasactionsScreen> {
 
   void getTransaction() async {
     isloading = true;
+    if (!mounted) return;
     setState(() {});
     transactions = await TransactionDBMethods()
         .getTrasactions(Supabase.instance.client.auth.currentUser!.id);
 
     isloading = false;
+    if (!mounted) return;
     setState(() {});
   }
 
@@ -124,12 +126,14 @@ class _TrasactionsScreenState extends State<TrasactionsScreen> {
           if (transaction.status == TransactionStatus.requested)
             SlidableAction(
               onPressed: (context) async {
+                if (!mounted) return;
                 setState(() {
                   isReceiving = true;
                 });
                 await TransactionDBMethods().updateTransaction(
                   transaction..status = TransactionStatus.delivered,
                 );
+                if (!mounted) return;
                 setState(() {
                   isReceiving = false;
                 });

@@ -43,6 +43,7 @@ class _UploadFoodScreenState extends State<UploadFoodScreen> {
     dateController!.text = '';
     nameController!.text = '';
     quantityController!.text = '';
+    if (!mounted) return;
     setState(() {});
   }
 
@@ -56,6 +57,7 @@ class _UploadFoodScreenState extends State<UploadFoodScreen> {
       if (pickedDate == null) {
         return;
       }
+      if (!mounted) return;
       setState(() {
         _selectedDate = pickedDate;
         dateController!.text = _selectedDate!.toUtc().toString();
@@ -84,6 +86,7 @@ class _UploadFoodScreenState extends State<UploadFoodScreen> {
         foodprice = FoodPrice.free;
       }
       foodState = widget.food!.state;
+      if (!mounted) return;
       setState(() {});
     }
     super.initState();
@@ -169,6 +172,7 @@ class _UploadFoodScreenState extends State<UploadFoodScreen> {
                 InkWell(
                   onTap: () async {
                     image = await imagePicker.selectPicture();
+                    if (!mounted) return;
                     setState(() {});
                   },
                   child: editing
@@ -197,6 +201,7 @@ class _UploadFoodScreenState extends State<UploadFoodScreen> {
                                     onPressed: () async {
                                       image = await imagePicker.selectPicture();
                                       editing = false;
+                                      if (!mounted) return;
                                       setState(() {});
                                     },
                                     child: const Text("Change Image"))
@@ -250,6 +255,7 @@ class _UploadFoodScreenState extends State<UploadFoodScreen> {
                                         onPressed: () async {
                                           image =
                                               await imagePicker.selectPicture();
+                                          if (!mounted) return;
                                           setState(() {});
                                         },
                                         child: const Text("Change Image"))
@@ -297,6 +303,7 @@ class _UploadFoodScreenState extends State<UploadFoodScreen> {
                     ],
                     onChanged: (value) {
                       foodprice = value!;
+                      if (!mounted) return;
                       setState(() {});
                     },
                   ),
@@ -351,6 +358,7 @@ class _UploadFoodScreenState extends State<UploadFoodScreen> {
                       ),
                     ],
                     onChanged: (value) {
+                      if (!mounted) return;
                       setState(() {
                         foodState = value!;
                       });
@@ -449,6 +457,7 @@ class _UploadFoodScreenState extends State<UploadFoodScreen> {
                                 : int.tryParse(priceController!.text));
                         print('${food.discountPrice} ${food.quantity}');
                         food.imageFile = image;
+                        if (!mounted) return;
                         setState(() {});
                         String? res;
                         if (widget.shouldEdit) {
@@ -459,6 +468,7 @@ class _UploadFoodScreenState extends State<UploadFoodScreen> {
                         if (res == null) {
                           isLoading = false;
                           snackbarError(title: res!, context: context);
+                          if (!mounted) return;
                           setState(() {});
                         } else {
                           snackbarSuccessful(title: res, context: context);
