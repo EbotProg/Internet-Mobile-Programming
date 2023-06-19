@@ -15,7 +15,6 @@ enum FoodState {
     return name;
   }
 
-
   String displayString() {
     return name;
   }

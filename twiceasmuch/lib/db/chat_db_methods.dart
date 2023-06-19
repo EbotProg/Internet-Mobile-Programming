@@ -81,7 +81,7 @@ class ChatDBMethods {
     required String myId,
     required String senderId,
   }) async {
-    final messagesMAp =await supabaseInstance.client
+    final messagesMAp = await supabaseInstance.client
         .from('messages')
         .select<List<Map<String, dynamic>>>()
         .in_('senderid', [senderId, myId]).in_(

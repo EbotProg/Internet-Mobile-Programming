@@ -48,7 +48,9 @@ class NotificationDBMethods {
 
   Future<void> createNotification(Notification notification) async {
     try {
-      await supabaseInstance.client.from('notifications').insert(notification.toJson());
+      await supabaseInstance.client
+          .from('notifications')
+          .insert(notification.toJson());
     } on PostgrestException catch (e) {
       print(e);
       return;

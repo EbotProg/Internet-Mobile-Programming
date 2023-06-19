@@ -2,7 +2,6 @@ enum PaymentStatus {
   pending,
   deposited,
   withdrawed;
-  
 
   factory PaymentStatus.fromString(String value) {
     return PaymentStatus.values.firstWhere(

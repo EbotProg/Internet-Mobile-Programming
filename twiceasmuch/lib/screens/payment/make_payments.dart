@@ -1,32 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:twiceasmuch/db/payment_db_methods.dart';
+import 'package:twiceasmuch/models/food.dart';
+import 'package:twiceasmuch/models/payment.dart';
+import 'package:twiceasmuch/screens/home_screen.dart';
 
 class MakePayment extends StatelessWidget {
-  const MakePayment({super.key});
-
+  const MakePayment({super.key, this.food});
+  final Food? food;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new_outlined),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
         ),
         title: const Text("Make Payment"),
         centerTitle: true,
       ),
       body: Column(children: [
-        const Padding(
-          padding: EdgeInsets.all(8.0),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
+              const Text(
                 "Amount",
                 style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
               ),
               Text(
-                "2500Fcfa",
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.w400),
+                '${food!.discountPrice! + 50}',
+                style:
+                    const TextStyle(fontSize: 25, fontWeight: FontWeight.w400),
               )
             ],
           ),
@@ -66,7 +74,13 @@ class MakePayment extends StatelessWidget {
           width: double.infinity,
           height: 50,
           child: OutlinedButton(
-            onPressed: () {
+            onPressed: () async {
+              //make payment
+              await PaymentDBMethods().createPayment(Payment(
+                  amount: food!.discountPrice! + 50,
+                  depositorID: Supabase.instance.client.auth.currentUser!.id,
+                  timeOfDeposit: DateTime.now(),
+                  withdrawerID: food!.donorID));
               showModalBottomSheet(
                   shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.vertical(
@@ -99,23 +113,30 @@ class MakePayment extends StatelessWidget {
                           const SizedBox(
                             height: 10,
                           ),
-                          SizedBox(
-                            width: double.infinity,
-                            height: 50,
-                            child: OutlinedButton(
-                              onPressed: () {},
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xff20B970),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
+                          Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: SizedBox(
+                              width: double.infinity,
+                              height: 50,
+                              child: OutlinedButton(
+                                onPressed: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) =>
+                                          const HomeScreen()));
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xff20B970),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
                                 ),
-                              ),
-                              child: const Text(
-                                'Return to home',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18,
+                                child: const Text(
+                                  'Return to home',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                  ),
                                 ),
                               ),
                             ),

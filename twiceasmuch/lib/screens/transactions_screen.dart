@@ -8,7 +8,6 @@ import 'package:twiceasmuch/global.dart';
 import 'package:twiceasmuch/models/transaction.dart';
 import 'package:twiceasmuch/widgets/message_bottom_sheet_widget.dart';
 
-
 class TrasactionsScreen extends StatefulWidget {
   const TrasactionsScreen({super.key});
 
