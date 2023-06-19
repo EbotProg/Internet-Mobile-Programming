@@ -26,7 +26,6 @@ class Payment {
 
   Map<String, dynamic> toJson() {
     return {
-      'paymentid': paymentID,
       'amount': amount,
       'depositorid': depositorID,
       'withdrawerid': withdrawerID,
@@ -52,9 +51,11 @@ class Payment {
       timeOfDeposit: DateFormat('yyyy-MM-dd HH:mm:ss')
           .parseUTC(payment['timeofdeposit'])
           .toLocal(),
-      timeOfWithdrawal: payment['timeofwithdrawal'] == null ? null : DateFormat('yyyy-MM-dd HH:mm:ss')
-          .parseUTC(payment['timeofwithdrawal'])
-          .toLocal(),
+      timeOfWithdrawal: payment['timeofwithdrawal'] == null
+          ? null
+          : DateFormat('yyyy-MM-dd HH:mm:ss')
+              .parseUTC(payment['timeofwithdrawal'])
+              .toLocal(),
     );
   }
 }

@@ -12,6 +12,7 @@ class FoodDBMethods {
       final foodMaps = await supabaseInstance.client
           .from('food')
           .select<List<Map<String, dynamic>>>()
+          .eq('sold', false)
           .order('uploadedAt');
       final users = await UserDBMethods().getUsers();
 
@@ -37,6 +38,7 @@ class FoodDBMethods {
       final foodMaps = await supabaseInstance.client
           .from('food')
           .select<List<Map<String, dynamic>>>()
+          .eq('sold', false)
           .order('uploadedAt', ascending: true);
       final users = await UserDBMethods().getUsers();
 
@@ -62,6 +64,7 @@ class FoodDBMethods {
       final foodMaps = await supabaseInstance.client
           .from('food')
           .select<List<Map<String, dynamic>>>()
+          .eq('sold', false)
           .order('uploadedAt', ascending: true);
       final users = await UserDBMethods().getUsers();
 

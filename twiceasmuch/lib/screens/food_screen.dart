@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:twiceasmuch/db/payment_db_methods.dart';
 import 'package:twiceasmuch/models/food.dart';
+import 'package:twiceasmuch/models/payment.dart';
 import 'package:twiceasmuch/screens/payment/make_payments.dart';
+import 'package:twiceasmuch/utilities/snackbar_utils.dart';
 
 class FoodScreen extends StatelessWidget {
   final Food food;
@@ -98,98 +102,116 @@ class FoodScreen extends StatelessWidget {
                           width: width * 0.8,
                           height: 50,
                           child: ElevatedButton(
-                            onPressed: () {
-                              showModalBottomSheet(
-                                  context: context,
-                                  builder: (context) {
-                                    return Container(
-                                      height: 180,
-                                      decoration: const BoxDecoration(),
-                                      child: Column(
-                                        children: [
-                                          const SizedBox(
-                                            height: 10,
-                                          ),
-                                          const Text(
-                                            "Select Payment Method",
-                                            style: TextStyle(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.w500),
-                                          ),
-                                          const SizedBox(
-                                            height: 20,
-                                          ),
-                                          Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Column(
-                                                  children: [
-                                                    IconButton(
-                                                      onPressed: () {
-                                                        Navigator.of(context).push(
-                                                            MaterialPageRoute(
-                                                                builder:
-                                                                    (context) =>
-                                                                        MakePayment()));
-                                                      },
-                                                      icon: Container(
-                                                        height: 50,
-                                                        width: 50,
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        15),
-                                                            image: const DecorationImage(
-                                                                fit: BoxFit
-                                                                    .cover,
-                                                                image: AssetImage(
-                                                                    'assets/mtn.jpg'))),
+                            onPressed: () async {
+                              if (food.discountPrice == 0 ||
+                                  food.discountPrice == null) {
+                                await PaymentDBMethods().createPayment(Payment(
+                                    amount: 0,
+                                    depositorID: Supabase
+                                        .instance.client.auth.currentUser!.id,
+                                    timeOfDeposit: DateTime.now(),
+                                    withdrawerID: food.donorID));
+                                snackbarSuccessful(
+                                    title:
+                                        "A notification has been sent to the donor",
+                                    context: context);
+                                Navigator.of(context).pop();
+                              } else {
+                                showModalBottomSheet(
+                                    context: context,
+                                    builder: (context) {
+                                      return Container(
+                                        height: 180,
+                                        decoration: const BoxDecoration(),
+                                        child: Column(
+                                          children: [
+                                            const SizedBox(
+                                              height: 10,
+                                            ),
+                                            const Text(
+                                              "Select Payment Method",
+                                              style: TextStyle(
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.w500),
+                                            ),
+                                            const SizedBox(
+                                              height: 20,
+                                            ),
+                                            Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Column(
+                                                    children: [
+                                                      IconButton(
+                                                        onPressed: () {
+                                                          Navigator.of(context).push(
+                                                              MaterialPageRoute(
+                                                                  builder: (context) =>
+                                                                      MakePayment(
+                                                                          food:
+                                                                              food)));
+                                                        },
+                                                        icon: Container(
+                                                          height: 50,
+                                                          width: 50,
+                                                          decoration: BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          15),
+                                                              image: const DecorationImage(
+                                                                  fit: BoxFit
+                                                                      .cover,
+                                                                  image: AssetImage(
+                                                                      'assets/mtn.jpg'))),
+                                                        ),
                                                       ),
-                                                    ),
-                                                    const Text("MTN momo")
-                                                  ],
-                                                ),
-                                                SizedBox(
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                      0.45,
-                                                ),
-                                                Column(
-                                                  children: [
-                                                    IconButton(
-                                                      onPressed: () {
-                                                        Navigator.of(context).push(
-                                                            MaterialPageRoute(
-                                                                builder:
-                                                                    (context) =>
-                                                                        MakePayment()));
-                                                      },
-                                                      icon: Container(
-                                                        height: 50,
-                                                        width: 50,
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        15),
-                                                            image: const DecorationImage(
-                                                                fit: BoxFit
-                                                                    .cover,
-                                                                image: AssetImage(
-                                                                    'assets/orange.png'))),
+                                                      const Text("MTN momo")
+                                                    ],
+                                                  ),
+                                                  SizedBox(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.45,
+                                                  ),
+                                                  Column(
+                                                    children: [
+                                                      IconButton(
+                                                        onPressed: () {
+                                                          Navigator.of(context).push(
+                                                              MaterialPageRoute(
+                                                                  builder: (context) =>
+                                                                      MakePayment(
+                                                                          food:
+                                                                              food)));
+                                                        },
+                                                        icon: Container(
+                                                          height: 50,
+                                                          width: 50,
+                                                          decoration: BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          15),
+                                                              image: const DecorationImage(
+                                                                  fit: BoxFit
+                                                                      .cover,
+                                                                  image: AssetImage(
+                                                                      'assets/orange.png'))),
+                                                        ),
                                                       ),
-                                                    ),
-                                                    const Text("Orange Money")
-                                                  ],
-                                                ),
-                                              ]),
-                                        ],
-                                      ),
-                                    );
-                                  });
+                                                      const Text("Orange Money")
+                                                    ],
+                                                  ),
+                                                ]),
+                                          ],
+                                        ),
+                                      );
+                                    });
+                              }
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xff20B970),
