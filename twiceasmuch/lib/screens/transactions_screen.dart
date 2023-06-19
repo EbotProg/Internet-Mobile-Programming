@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:twiceasmuch/db/transaction_db_methods.dart';
 import 'package:twiceasmuch/models/transaction.dart';
 
 class TrasactionsScreen extends StatefulWidget {
@@ -10,30 +12,62 @@ class TrasactionsScreen extends StatefulWidget {
 
 class _TrasactionsScreenState extends State<TrasactionsScreen> {
   List<Transaction> transactions = [];
+  bool isloading = false;
+  void getTransaction() async {
+    isloading = true;
+    setState(() {});
+    transactions = await TransactionDBMethods()
+        .getTrasactions(Supabase.instance.client.auth.currentUser!.id);
+
+    isloading = false;
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    getTransaction();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // const Padding(
-            //   padding: EdgeInsets.symmetric(horizontal: 0),
-            //   child: Text(
-            //     'Transactions',
-            //     style: TextStyle(
-            //       color: Colors.black,
-            //       fontSize: 30,
-            //       fontWeight: FontWeight.w700,
-            //     ),
-            //   ),
-            // ),
-            // const SizedBox(height: 10),
-            ...List.generate(15, (index) => getItem(transactions[index])),
-          ],
-        ),
-      ),
+    return RefreshIndicator(
+      onRefresh: () async {
+        getTransaction();
+      },
+      child: isloading
+          ? const CircularProgressIndicator(
+              color: Colors.green,
+            )
+          : SingleChildScrollView(
+              child: transactions.isEmpty
+                  ? const Center(
+                      child: Text("No Transactions Yet!"),
+                    )
+                  : Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // const Padding(
+                          //   padding: EdgeInsets.symmetric(horizontal: 0),
+                          //   child: Text(
+                          //     'Transactions',
+                          //     style: TextStyle(
+                          //       color: Colors.black,
+                          //       fontSize: 30,
+                          //       fontWeight: FontWeight.w700,
+                          //     ),
+                          //   ),
+                          // ),
+                          // const SizedBox(height: 10),
+                          ...List.generate(
+                              15, (index) => getItem(transactions[index])),
+                        ],
+                      ),
+                    ),
+            ),
     );
   }
 
