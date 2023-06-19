@@ -22,7 +22,7 @@ class NotificationDBMethods {
       final notifications =
           notificationsMap.map((e) => Notification.fromJson(e)).toList();
       notifications.sort(
-        (a, b) => a.timeSent?.compareTo(b.timeSent ?? DateTime.now()) ?? 0,
+        (a, b) => b.timeSent?.compareTo(a.timeSent ?? DateTime.now()) ?? 0,
       );
 
       for (var notification in notifications) {

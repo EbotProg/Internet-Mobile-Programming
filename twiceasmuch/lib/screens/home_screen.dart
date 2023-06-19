@@ -35,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
       '2ICEASMUCH',
       if (globalUser?.userType == UserType.donor) 'Inventory',
       'Chats',
-      'Trasactions',
+      'Transactions',
     ];
   }
 

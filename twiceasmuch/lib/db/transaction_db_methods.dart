@@ -34,7 +34,7 @@ class TransactionDBMethods {
           trasactionsMap2.map((e) => Transaction.fromJson(e)).toList();
       final trasactions = [...transactions1, ...transactions2];
       trasactions.sort(
-        (a, b) => a.time?.compareTo(b.time ?? DateTime.now()) ?? 0,
+        (a, b) => b.time?.compareTo(a.time ?? DateTime.now()) ?? 0,
       );
 
       for (var transaction in trasactions) {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:twiceasmuch/db/food_db_methods.dart';
 import 'package:twiceasmuch/db/transaction_db_methods.dart';
 import 'package:twiceasmuch/enums/transaction_status.dart';
 import 'package:twiceasmuch/global.dart';
@@ -9,14 +10,22 @@ import 'package:twiceasmuch/screens/payment/make_payments.dart';
 import 'package:twiceasmuch/widgets/message_bottom_sheet_widget.dart';
 import 'package:twiceasmuch/utilities/snackbar_utils.dart';
 
-class FoodScreen extends StatelessWidget {
+class FoodScreen extends StatefulWidget {
   final Food food;
   const FoodScreen({super.key, required this.food});
+
+  @override
+  State<FoodScreen> createState() => _FoodScreenState();
+}
+
+class _FoodScreenState extends State<FoodScreen> {
+  bool loading = false;
 
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -37,7 +46,7 @@ class FoodScreen extends StatelessWidget {
               width: width,
               decoration: BoxDecoration(
                   image: DecorationImage(
-                      image: NetworkImage(food.image ?? ''),
+                      image: NetworkImage(widget.food.image ?? ''),
                       fit: BoxFit.cover)),
             ),
             Expanded(
@@ -52,7 +61,7 @@ class FoodScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(food.name ?? '',
+                      Text(widget.food.name ?? '',
                           style: const TextStyle(
                               fontSize: 30, fontWeight: FontWeight.bold)),
                       const SizedBox(height: 10),
@@ -71,9 +80,9 @@ class FoodScreen extends StatelessWidget {
                                 width: 50,
                                 child: AspectRatio(
                                   aspectRatio: 3 / 4,
-                                  child: food.donor?.picture != null
+                                  child: widget.food.donor?.picture != null
                                       ? Image.network(
-                                          food.donor!.picture!,
+                                          widget.food.donor!.picture!,
                                           fit: BoxFit.cover,
                                         )
                                       : Image.asset(
@@ -85,12 +94,12 @@ class FoodScreen extends StatelessWidget {
                               const SizedBox(
                                 width: 10,
                               ),
-                              Text(food.donor?.username ?? ''),
+                              Text(widget.food.donor?.username ?? ''),
                             ],
                           ),
                           const Text("\t | \t"),
                           Text(
-                            "${DateFormat('MMM dd yyyy').format(food.uploadedAt!)}\n${DateFormat.jm().format(food.uploadedAt!)}",
+                            "${DateFormat('MMM dd yyyy').format(widget.food.uploadedAt!)}\n${DateFormat.jm().format(widget.food.uploadedAt!)}",
                             style: const TextStyle(
                                 fontSize: 11, color: Colors.grey),
                           ),
@@ -104,145 +113,170 @@ class FoodScreen extends StatelessWidget {
                           width: width * 0.8,
                           height: 50,
                           child: ElevatedButton(
-                            onPressed: () async {
-                              if (food.discountPrice == 0 ||
-                                  food.discountPrice == null) {
-                                await TransactionDBMethods().createTrasaction(
-                                  Transaction(
-                                    buyerID: globalUser?.userID,
-                                    donorID: food.donorID,
-                                    foodID: food.foodID,
-                                    status: TransactionStatus.requested,
-                                    time: DateTime.now(),
-                                    food: food,
-                                    donor: food.donor,
-                                    buyer: globalUser,
-                                  ),
-                                );
-                                snackbarSuccessful(
-                                  title:
-                                      "A notification has been sent to the donor",
-                                  context: context,
-                                );
-                                Navigator.of(context).pop();
-                              } else {
-                                showModalBottomSheet(
-                                    context: context,
-                                    builder: (context) {
-                                      return Container(
-                                        height: 180,
-                                        decoration: const BoxDecoration(),
-                                        child: Column(
-                                          children: [
-                                            const SizedBox(
-                                              height: 10,
-                                            ),
-                                            const Text(
-                                              "Select Payment Method",
-                                              style: TextStyle(
-                                                  fontSize: 20,
-                                                  fontWeight: FontWeight.w500),
-                                            ),
-                                            const SizedBox(
-                                              height: 20,
-                                            ),
-                                            Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Column(
-                                                    children: [
-                                                      IconButton(
-                                                        onPressed: () {
-                                                          Navigator.of(context).push(
-                                                              MaterialPageRoute(
-                                                                  builder: (context) =>
-                                                                      MakePayment(
-                                                                          food:
-                                                                              food)));
-                                                        },
-                                                        icon: Container(
-                                                          height: 50,
-                                                          width: 50,
-                                                          decoration: BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          15),
-                                                              image: const DecorationImage(
-                                                                  fit: BoxFit
-                                                                      .cover,
-                                                                  image: AssetImage(
-                                                                      'assets/mtn.jpg'))),
-                                                        ),
-                                                      ),
-                                                      const Text("MTN momo")
-                                                    ],
-                                                  ),
-                                                  SizedBox(
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            0.45,
-                                                  ),
-                                                  Column(
-                                                    children: [
-                                                      IconButton(
-                                                        onPressed: () {
-                                                          Navigator.of(context)
-                                                              .push(
-                                                            MaterialPageRoute(
-                                                              builder:
-                                                                  (context) =>
-                                                                      MakePayment(
-                                                                food: food,
-                                                              ),
-                                                            ),
-                                                          );
-                                                        },
-                                                        icon: Container(
-                                                          height: 50,
-                                                          width: 50,
-                                                          decoration: BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          15),
-                                                              image: const DecorationImage(
-                                                                  fit: BoxFit
-                                                                      .cover,
-                                                                  image: AssetImage(
-                                                                      'assets/orange.png'))),
-                                                        ),
-                                                      ),
-                                                      const Text("Orange Money")
-                                                    ],
-                                                  ),
-                                                ]),
-                                          ],
+                            onPressed: loading
+                                ? () {}
+                                : () async {
+                                    if (widget.food.discountPrice == 0 ||
+                                        widget.food.discountPrice == null) {
+                                      if (!mounted) return;
+                                      setState(() {
+                                        loading = true;
+                                      });
+                                      await TransactionDBMethods()
+                                          .createTrasaction(
+                                        Transaction(
+                                          buyerID: globalUser?.userID,
+                                          donorID: widget.food.donorID,
+                                          foodID: widget.food.foodID,
+                                          status: TransactionStatus.requested,
+                                          time: DateTime.now(),
+                                          food: widget.food,
+                                          donor: widget.food.donor,
+                                          buyer: globalUser,
                                         ),
                                       );
-                                    });
-                              }
-                            },
+                                      await FoodDBMethods().editFood(
+                                        widget.food..sold = true,
+                                      );
+                                      if (!mounted) return;
+                                      setState(() {
+                                        loading = true;
+                                      });
+                                      snackbarSuccessful(
+                                        title:
+                                            "A notification has been sent to the donor",
+                                        context: context,
+                                      );
+                                      Navigator.of(context).pop();
+                                    } else {
+                                      showModalBottomSheet(
+                                          context: context,
+                                          builder: (context) {
+                                            return Container(
+                                              height: 180,
+                                              decoration: const BoxDecoration(),
+                                              child: Column(
+                                                children: [
+                                                  const SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  const Text(
+                                                    "Select Payment Method",
+                                                    style: TextStyle(
+                                                        fontSize: 20,
+                                                        fontWeight:
+                                                            FontWeight.w500),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 20,
+                                                  ),
+                                                  Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Column(
+                                                          children: [
+                                                            IconButton(
+                                                              onPressed: () {
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .push(MaterialPageRoute(
+                                                                        builder:
+                                                                            (context) =>
+                                                                                MakePayment(food: widget.food)));
+                                                              },
+                                                              icon: Container(
+                                                                height: 50,
+                                                                width: 50,
+                                                                decoration: BoxDecoration(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            15),
+                                                                    image: const DecorationImage(
+                                                                        fit: BoxFit
+                                                                            .cover,
+                                                                        image: AssetImage(
+                                                                            'assets/mtn.jpg'))),
+                                                              ),
+                                                            ),
+                                                            const Text(
+                                                                "MTN momo")
+                                                          ],
+                                                        ),
+                                                        SizedBox(
+                                                          width: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width *
+                                                              0.45,
+                                                        ),
+                                                        Column(
+                                                          children: [
+                                                            IconButton(
+                                                              onPressed: () {
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .push(
+                                                                  MaterialPageRoute(
+                                                                    builder:
+                                                                        (context) =>
+                                                                            MakePayment(
+                                                                      food: widget
+                                                                          .food,
+                                                                    ),
+                                                                  ),
+                                                                );
+                                                              },
+                                                              icon: Container(
+                                                                height: 50,
+                                                                width: 50,
+                                                                decoration: BoxDecoration(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            15),
+                                                                    image: const DecorationImage(
+                                                                        fit: BoxFit
+                                                                            .cover,
+                                                                        image: AssetImage(
+                                                                            'assets/orange.png'))),
+                                                              ),
+                                                            ),
+                                                            const Text(
+                                                                "Orange Money")
+                                                          ],
+                                                        ),
+                                                      ]),
+                                                ],
+                                              ),
+                                            );
+                                          });
+                                    }
+                                  },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xff20B970),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
                               ),
                             ),
-                            child: Text(
-                              food.discountPrice == null ||
-                                      food.discountPrice == 0
-                                  ? 'Get Free'
-                                  : 'Get for ${food.discountPrice!} FCFA',
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                              ),
-                            ),
+                            child: loading
+                                ? Center(
+                                    child: CircularProgressIndicator(
+                                      color: Colors.white,
+                                      strokeWidth: 2.0,
+                                    ),
+                                  )
+                                : Text(
+                                    widget.food.discountPrice == null ||
+                                            widget.food.discountPrice == 0
+                                        ? 'Get Free'
+                                        : 'Get for ${widget.food.discountPrice!} FCFA',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18,
+                                    ),
+                                  ),
                           ),
                         ),
                       ),
@@ -253,8 +287,8 @@ class FoodScreen extends StatelessWidget {
                               context: context,
                               builder: (context) {
                                 return MessageBottomSheetWidget(
-                                  user: food.donor!,
-                                  food: food,
+                                  user: widget.food.donor!,
+                                  food: widget.food,
                                 );
                               });
                         },
@@ -264,7 +298,7 @@ class FoodScreen extends StatelessWidget {
                             const SizedBox(
                               width: 10,
                             ),
-                            Text("Message ${food.donor?.username ?? ''}")
+                            Text("Message ${widget.food.donor?.username ?? ''}")
                           ],
                         ),
                       ),
@@ -296,10 +330,10 @@ class FoodScreen extends StatelessWidget {
                             "Expiry Date",
                             style: TextStyle(fontSize: 20),
                           ),
-                          Text(food.expiryDate == null
+                          Text(widget.food.expiryDate == null
                               ? 'No expiry date'
                               : DateFormat('MMM dd yyyy')
-                                  .format(food.expiryDate!))
+                                  .format(widget.food.expiryDate!))
                         ],
                       ),
                       Row(
@@ -309,7 +343,7 @@ class FoodScreen extends StatelessWidget {
                             "Location ",
                             style: TextStyle(fontSize: 18),
                           ),
-                          Text(food.donor?.location ?? '')
+                          Text(widget.food.donor?.location ?? '')
                         ],
                       ),
                       const Row(
@@ -329,7 +363,7 @@ class FoodScreen extends StatelessWidget {
                             "Quantity",
                             style: TextStyle(fontSize: 18),
                           ),
-                          Text("${food.quantity ?? 1} plate(s)")
+                          Text("${widget.food.quantity ?? 1} plate(s)")
                         ],
                       ),
                       Row(
@@ -339,7 +373,7 @@ class FoodScreen extends StatelessWidget {
                             "State",
                             style: TextStyle(fontSize: 18),
                           ),
-                          Text(food.state.displayString())
+                          Text(widget.food.state.displayString())
                         ],
                       ),
                       Row(
@@ -350,10 +384,10 @@ class FoodScreen extends StatelessWidget {
                             style: TextStyle(fontSize: 18),
                           ),
                           Text(
-                            food.discountPrice == null ||
-                                    food.discountPrice == 0
+                            widget.food.discountPrice == null ||
+                                    widget.food.discountPrice == 0
                                 ? "Free"
-                                : '${food.discountPrice!}FCFA',
+                                : '${widget.food.discountPrice!}FCFA',
                           )
                         ],
                       ),
