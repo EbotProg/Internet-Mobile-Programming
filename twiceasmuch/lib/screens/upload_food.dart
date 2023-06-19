@@ -445,16 +445,21 @@ class _UploadFoodScreenState extends State<UploadFoodScreen> {
                       if (formKey.currentState!.validate()) {
                         isLoading = true;
                         final food = Food(
-                            donorID:
-                                Supabase.instance.client.auth.currentUser!.id,
-                            state: foodState,
-                            location: locationController!.text,
-                            name: nameController!.text,
-                            quantity: int.tryParse(quantityController!.text),
-                            expiryDate: _selectedDate,
-                            discountPrice: priceController!.text.isEmpty
-                                ? 0
-                                : int.tryParse(priceController!.text));
+                          donorID:
+                              Supabase.instance.client.auth.currentUser!.id,
+                          state: foodState,
+                          location: locationController!.text,
+                          name: nameController!.text,
+                          quantity: int.tryParse(quantityController!.text),
+                          expiryDate: _selectedDate,
+                          discountPrice: priceController!.text.isEmpty
+                              ? 0
+                              : int.tryParse(
+                                  priceController!.text,
+                                ),
+                          foodID: widget.food?.foodID,
+                          image: widget.food?.image,
+                        );
                         print('${food.discountPrice} ${food.quantity}');
                         food.imageFile = image;
                         if (!mounted) return;
@@ -474,6 +479,7 @@ class _UploadFoodScreenState extends State<UploadFoodScreen> {
                           snackbarSuccessful(title: res, context: context);
                           isLoading = false;
                           setToNull();
+                          Navigator.of(context).pop();
                         }
                       }
                     },

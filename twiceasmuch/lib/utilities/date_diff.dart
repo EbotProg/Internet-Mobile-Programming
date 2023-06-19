@@ -1,6 +1,6 @@
 extension DateTimeExt on DateTime {
   String currentTimelapseString() {
-    final duration = difference(DateTime.now());
+    final duration = DateTime.now().difference(this);
 
     if (duration.inDays > 365) {
       return '${duration.inDays ~/ 365} years ago';
