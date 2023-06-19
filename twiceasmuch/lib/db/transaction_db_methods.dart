@@ -94,9 +94,8 @@ class TransactionDBMethods {
           .insert(transaction.toJson());
       await NotificationDBMethods().createNotification(
         Notification(
-          content: (transaction.buyer?.username ?? '') +
-              ' has requested to get ' +
-              (transaction.food?.name ?? ''),
+          content:
+              '${transaction.buyer?.username ?? ''} has requested to get ${transaction.food?.name ?? ''}',
           foodID: transaction.foodID,
           timeSent: transaction.time,
           userID: transaction.donorID,
