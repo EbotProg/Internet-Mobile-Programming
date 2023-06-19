@@ -442,18 +442,19 @@ class _UploadFoodScreenState extends State<UploadFoodScreen> {
                             state: foodState,
                             location: locationController!.text,
                             name: nameController!.text,
-                            quantity: int.parse(quantityController!.text),
+                            quantity: int.tryParse(quantityController!.text),
                             expiryDate: _selectedDate,
                             discountPrice: priceController!.text.isEmpty
                                 ? 0
                                 : int.tryParse(priceController!.text));
+                        print('${food.discountPrice} ${food.quantity}');
                         food.imageFile = image;
                         setState(() {});
                         String? res;
                         if (widget.shouldEdit) {
-                          res = await db.uploadFood(food);
-                        } else {
                           res = await db.editFood(food);
+                        } else {
+                          res = await db.uploadFood(food);
                         }
                         if (res == null) {
                           isLoading = false;
