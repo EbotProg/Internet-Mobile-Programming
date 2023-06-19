@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:twiceasmuch/db/notification_db_methods.dart';
 import 'package:twiceasmuch/models/notification.dart' as notification;
@@ -96,11 +97,12 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                 '${notification.user!.username}',
                 style: const TextStyle(fontWeight: FontWeight.bold),
               ),
-              Text('${notification.timeSent}'),
+              Text(DateFormat.MEd()
+                  .format(notification.timeSent ?? DateTime.now())),
             ],
           ),
           const SizedBox(height: 5),
-          Text('${notification.food!.name}'),
+          Text('${notification.content}'),
         ],
       ),
     );
