@@ -5,6 +5,7 @@ import 'package:twiceasmuch/global.dart';
 import 'package:twiceasmuch/screens/auth_start_screen.dart';
 import 'package:twiceasmuch/utilities/pick_image.dart';
 import 'package:twiceasmuch/widgets/dialog.dart';
+import 'package:twiceasmuch/widgets/edit_account_bottom_sheet_widget.dart';
 
 class AccountScreen extends StatefulWidget {
   const AccountScreen({super.key});
@@ -15,6 +16,7 @@ class AccountScreen extends StatefulWidget {
 
 class _AccountScreenState extends State<AccountScreen> {
   bool isUploadingImage = false;
+  bool isRemovingPicture = false;
   final imagePicker = PickImage();
 
   @override
@@ -53,27 +55,35 @@ class _AccountScreenState extends State<AccountScreen> {
                   if (globalUser!.picture != null)
                     GestureDetector(
                       onTap: () async {
+                        setState(() {
+                          isRemovingPicture = true;
+                        });
                         await UserDBMethods().updateUser(
                           globalUser!..picture = null,
                         );
+                        setState(() {
+                          isRemovingPicture = false;
+                        });
                       },
-                      child: const SizedBox(
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              Icons.delete_outline,
-                              color: Colors.redAccent,
-                            ),
-                            Text(
-                              'Remove',
-                              style: TextStyle(
-                                color: Colors.redAccent,
+                      child: isRemovingPicture
+                          ? const CircularProgressIndicator()
+                          : const SizedBox(
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    Icons.delete_outline,
+                                    color: Colors.redAccent,
+                                  ),
+                                  Text(
+                                    'Remove',
+                                    style: TextStyle(
+                                      color: Colors.redAccent,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                          ],
-                        ),
-                      ),
                     )
                 ],
               ),
@@ -200,28 +210,40 @@ class _AccountScreenState extends State<AccountScreen> {
                 ),
               ),
               const SizedBox(height: 20),
-              const Row(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
+                  const Text(
                     'Account Info',
                     style: TextStyle(fontSize: 18),
                   ),
-                  SizedBox(
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          Icons.edit,
-                          color: Colors.blueAccent,
-                        ),
-                        Text(
-                          'Edit',
-                          style: TextStyle(
+                  GestureDetector(
+                    onTap: () async {
+                      await showModalBottomSheet(
+                          isDismissible: true,
+                          context: context,
+                          builder: (context) {
+                            return const EditAccountBottomSheetWidget();
+                          });
+
+                      setState(() {});
+                    },
+                    child: const SizedBox(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.edit,
                             color: Colors.blueAccent,
                           ),
-                        ),
-                      ],
+                          Text(
+                            'Edit',
+                            style: TextStyle(
+                              color: Colors.blueAccent,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   )
                 ],
