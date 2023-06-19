@@ -14,12 +14,12 @@ class TransactionDBMethods {
       final trasactionsMap1 = await supabaseInstance.client
           .from('transactions')
           .select<List<Map<String, dynamic>>>()
-          .contains('buyerid', userId)
+          .eq('buyerid', userId)
           .order('time');
       final trasactionsMap2 = await supabaseInstance.client
           .from('transactions')
           .select<List<Map<String, dynamic>>>()
-          .contains('donorid', userId)
+          .eq('donorid', userId)
           .order('time');
 
       final users = await UserDBMethods().getUsers();

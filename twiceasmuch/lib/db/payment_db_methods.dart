@@ -12,23 +12,22 @@ class PaymentDBMethods {
       final paymentsMap1 = await supabaseInstance.client
           .from('payment')
           .select<List<Map<String, dynamic>>>()
-          .contains('depositorid', userId)
+          .eq('depositorid', userId)
           .order('timeofdeposit');
       final paymentsMap2 = await supabaseInstance.client
           .from('payment')
           .select<List<Map<String, dynamic>>>()
-          .contains('withdrawerid', userId)
+          .eq('withdrawerid', userId)
           .order('timeofdeposit');
 
       final users = await UserDBMethods().getUsers();
 
-      final payments1 =
-          paymentsMap1.map((e) => Payment.fromJson(e)).toList();
-      final payments2 =
-          paymentsMap2.map((e) => Payment.fromJson(e)).toList();
+      final payments1 = paymentsMap1.map((e) => Payment.fromJson(e)).toList();
+      final payments2 = paymentsMap2.map((e) => Payment.fromJson(e)).toList();
       final payments = [...payments1, ...payments2];
       payments.sort(
-        (a, b) => a.timeOfDeposit?.compareTo(b.timeOfDeposit ?? DateTime.now()) ?? 0,
+        (a, b) =>
+            a.timeOfDeposit?.compareTo(b.timeOfDeposit ?? DateTime.now()) ?? 0,
       );
 
       for (var payment in payments) {
@@ -67,9 +66,7 @@ class PaymentDBMethods {
 
   Future<void> createPayment(Payment payment) async {
     try {
-      await supabaseInstance.client
-          .from('payment')
-          .insert(payment.toJson());
+      await supabaseInstance.client.from('payment').insert(payment.toJson());
     } on PostgrestException catch (e) {
       print(e);
       return;

@@ -14,12 +14,12 @@ class ChatDBMethods {
       final messagesMap1 = await supabaseInstance.client
           .from('messages')
           .select<List<Map<String, dynamic>>>()
-          .contains('senderid', userId)
+          .eq('senderid', userId)
           .order('timesent');
       final messagesMap2 = await supabaseInstance.client
           .from('messages')
           .select<List<Map<String, dynamic>>>()
-          .contains('receiverid', userId)
+          .eq('receiverid', userId)
           .order('timesent');
 
       final users = await UserDBMethods().getUsers();
@@ -96,6 +96,4 @@ class ChatDBMethods {
               .toList(),
         );
   }
-
-
 }

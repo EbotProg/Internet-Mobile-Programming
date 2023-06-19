@@ -36,8 +36,10 @@ class _TrasactionsScreenState extends State<TrasactionsScreen> {
         getTransaction();
       },
       child: isloading
-          ? const CircularProgressIndicator(
-              color: Colors.green,
+          ? const Center(
+              child: CircularProgressIndicator(
+                color: Colors.green,
+              ),
             )
           : SingleChildScrollView(
               child: transactions.isEmpty
