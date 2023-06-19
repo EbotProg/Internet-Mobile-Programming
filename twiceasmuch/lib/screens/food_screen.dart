@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:twiceasmuch/models/food.dart';
+import 'package:twiceasmuch/screens/payment/make_payments.dart';
 
 class FoodScreen extends StatelessWidget {
   final Food food;
@@ -84,7 +85,8 @@ class FoodScreen extends StatelessWidget {
                           const Text("\t | \t"),
                           Text(
                             "${DateFormat('MMM dd yyyy').format(food.uploadedAt!)}\n${DateFormat.jm().format(food.uploadedAt!)}",
-                            style: const TextStyle(fontSize: 11, color: Colors.grey),
+                            style: const TextStyle(
+                                fontSize: 11, color: Colors.grey),
                           ),
                         ],
                       ),
@@ -124,7 +126,13 @@ class FoodScreen extends StatelessWidget {
                                                 Column(
                                                   children: [
                                                     IconButton(
-                                                      onPressed: () {},
+                                                      onPressed: () {
+                                                        Navigator.of(context).push(
+                                                            MaterialPageRoute(
+                                                                builder:
+                                                                    (context) =>
+                                                                        MakePayment()));
+                                                      },
                                                       icon: Container(
                                                         height: 50,
                                                         width: 50,
@@ -152,7 +160,13 @@ class FoodScreen extends StatelessWidget {
                                                 Column(
                                                   children: [
                                                     IconButton(
-                                                      onPressed: () {},
+                                                      onPressed: () {
+                                                        Navigator.of(context).push(
+                                                            MaterialPageRoute(
+                                                                builder:
+                                                                    (context) =>
+                                                                        MakePayment()));
+                                                      },
                                                       icon: Container(
                                                         height: 50,
                                                         width: 50,

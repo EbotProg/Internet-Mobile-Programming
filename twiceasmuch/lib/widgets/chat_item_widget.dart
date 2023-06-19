@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:twiceasmuch/models/chat.dart';
 import 'package:twiceasmuch/screens/messages_screen.dart';
 
 class ChatItemWidget extends StatelessWidget {
   // final AppUser user;
   // final VoidCallback onTap;
-  const ChatItemWidget({
-    super.key,
-    // required this.user,
-    // required this.onTap,
-  });
+
+  const ChatItemWidget(
+      {super.key,
+      // required this.user,
+      // required this.onTap,
+      this.chat});
+
+  final Chat? chat;
 
   @override
   Widget build(BuildContext context) {
@@ -24,31 +28,29 @@ class ChatItemWidget extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 20,
-              child:
-                  //  user.imageUrl != null
-                  //     ? ClipOval(
-                  //         child: Image.network(
-                  //           user.imageUrl!,
-                  //           fit: BoxFit.cover,
-                  //         ),
-                  //       )
-                  //     :
-                  ClipOval(
-                child: Image.asset('assets/Ellipse 4.png'),
-              ),
+              child: chat!.user.picture != null
+                  ? ClipOval(
+                      child: Image.network(
+                        chat!.user.picture!,
+                        fit: BoxFit.cover,
+                      ),
+                    )
+                  : ClipOval(
+                      child: Image.asset('assets/Ellipse 4.png'),
+                    ),
             ),
             const SizedBox(width: 15),
-            const Expanded(
+            Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
                   Padding(
-                    padding: EdgeInsets.only(right: 10),
+                    padding: const EdgeInsets.only(right: 10),
                     child: Text(
-                      'Ellie',
-                      style: TextStyle(
+                      chat!.user.username!,
+                      style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 17,
                       ),
@@ -58,10 +60,10 @@ class ChatItemWidget extends StatelessWidget {
                   ),
                   // const SizedBox(height: 5),
                   Padding(
-                    padding: EdgeInsets.only(right: 10),
+                    padding: const EdgeInsets.only(right: 10),
                     child: Text(
-                      'Say Hi to Ellie',
-                      style: TextStyle(
+                      'Message ${chat!.user.username!}',
+                      style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 14,
                         color: Colors.grey,
@@ -70,8 +72,8 @@ class ChatItemWidget extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  SizedBox(height: 10),
-                  Divider(height: 0),
+                  const SizedBox(height: 10),
+                  const Divider(height: 0),
                 ],
               ),
             ),
