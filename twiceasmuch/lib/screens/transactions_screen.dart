@@ -221,7 +221,7 @@ class _TrasactionsScreenState extends State<TrasactionsScreen> {
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        DateFormat.Md()
+                        DateFormat.MMMEd()
                             .format(transaction.time ?? DateTime.now()),
                       ),
                     ],
