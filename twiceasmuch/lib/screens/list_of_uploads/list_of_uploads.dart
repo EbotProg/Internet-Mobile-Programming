@@ -51,13 +51,14 @@ class _ListOfUploadsState extends State<ListOfUploads> {
                     itemBuilder: (context, index) {
                       return UploadedFood(
                           food: foods[index],
-                          editFood: () {
-                            Navigator.of(context).push(MaterialPageRoute(
+                          editFood: () async {
+                            await Navigator.of(context).push(MaterialPageRoute(
                               builder: (c) => UploadFoodScreen(
                                 shouldEdit: true,
                                 food: foods[index],
                               ),
                             ));
+                            getUploads();
                           },
                           deleteFood: () async {
                             await db.deleteFood(foods[index]);
